@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="trophyG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4C141"></stop>
+      <stop offset="1" stop-color="#D49414"></stop>
+    </linearGradient>
+  </defs>
+  
+  <rect x="20" y="52" width="24" height="6" rx="2" fill="#8C6500"></rect>
+  <rect x="14" y="56" width="36" height="5" rx="2.5" fill="#5A4200"></rect>
+  
+  <rect x="28" y="44" width="8" height="10" fill="#B47A12"></rect>
+  
+  <path d="M14 18 v8 a8 8 0 0 0 8 8" fill="none" stroke="#D49414" stroke-width="4" stroke-linecap="round"></path>
+  <path d="M50 18 v8 a8 8 0 0 1 -8 8" fill="none" stroke="#D49414" stroke-width="4" stroke-linecap="round"></path>
+  
+  <path d="M18 8 h28 v18 a14 14 0 0 1 -28 0 z" fill="url(#trophyG)" stroke="#A66A00" stroke-width="1.5"></path>
+  
+  <path d="M32 14 l2.1 4.4 4.8.7 -3.5 3.4 .8 4.8 -4.2-2.3 -4.2 2.3 .8-4.8 -3.5-3.4 4.8-.7 z" fill="#fff" opacity=".95"></path>
+</svg>

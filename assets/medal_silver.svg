@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<svg width="18px" height="26px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="medal_silver">
+        <path d="M8.118,-0l-6.079,-0l4.902,5.3l3.919,-0l-2.742,-5.3Z" style="fill:#dc3b3b;"></path>
+        <path d="M15.779,0l-4.844,0l-0.889,1.824l1.415,2.608l4.318,-4.432Z" style="fill:#a00;"></path>
+        <g>
+            <path d="M11.425,6.772c0,-0.347 -0.281,-0.628 -0.628,-0.628l-3.594,-0c-0.347,-0 -0.628,0.281 -0.628,0.628c-0,0.347 0.281,0.628 0.628,0.628l3.594,0c0.347,0 0.628,-0.281 0.628,-0.628Z" style="fill:#bfbfbf;"></path>
+            <circle cx="9" cy="17" r="9" style="fill:#bfbfbf;"></circle>
+            <circle cx="9" cy="17" r="7.292" style="fill:url(#_Linear1);"></circle>
+            <path d="M11.157,16.696l-1.66,5.966l4.516,-5.966l-2.856,-0Zm-4.314,-0l-2.856,-0l4.516,5.966l-1.66,-5.966Zm0.628,-0l1.529,5.493l1.529,-5.493l-3.058,-0Zm1.529,-3.04l-1.311,2.342l2.622,0l-1.311,-2.342Zm3.093,-0.324l-0.742,2.666l2.666,0l-1.924,-2.666Zm-6.186,0l-1.924,2.666l2.666,0l-0.742,-2.666Zm0.541,-0.314l0.729,2.62l1.466,-2.62l-2.195,0Zm2.909,0l1.466,2.62l0.729,-2.62l-2.195,0Z" style="fill:#696969;fill-rule:nonzero;"></path>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(6.5332e-16,10.6695,-10.6695,6.5332e-16,9,13.6229)"><stop offset="0" style="stop-color:#f2f2f2;stop-opacity:1"></stop><stop offset="1" style="stop-color:#656565;stop-opacity:1"></stop></linearGradient>
+    </defs>
+</svg>

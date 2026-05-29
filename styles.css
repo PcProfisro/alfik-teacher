@@ -1,0 +1,116 @@
+/* Alfík app — shared styles for all artboards.
+ * Tokens come from tokens.css; this file scopes typography + small
+ * primitives used inside artboards.
+ */
+
+.alf-root {
+  font-family: var(--alf-font-body);
+  color: var(--alf-ink);
+  background: var(--alf-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  font-feature-settings: "ss01";
+}
+
+.alf-root *,
+.alf-root *::before,
+.alf-root *::after { box-sizing: border-box; }
+
+.alf-display { font-family: var(--alf-font-display); }
+
+/* ── Reusable buttons ─────────────────────────────────────── */
+.alf-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: var(--alf-r-md);
+  background: var(--alf-surface); color: var(--alf-ink);
+  border: 1.5px solid var(--alf-line);
+  font: 600 14px var(--alf-font-body);
+  cursor: pointer; transition: all .15s ease;
+  white-space: nowrap;
+}
+.alf-btn:hover { border-color: var(--alf-sky-deep); color: var(--alf-sky-deep); }
+.alf-btn.is-active {
+  background: var(--alf-sky-deep); color: #fff; border-color: var(--alf-sky-deep);
+}
+.alf-btn.is-active:hover { background: #2D8FC4; }
+
+.alf-btn-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 14px; border-radius: var(--alf-r-pill);
+  background: #fff; color: var(--alf-ink);
+  border: 1.5px solid var(--alf-line);
+  font: 600 14px var(--alf-font-body); cursor: pointer;
+  transition: all .15s ease; white-space: nowrap;
+}
+.alf-btn-pill.is-active {
+  background: var(--alf-ink); color: #fff; border-color: var(--alf-ink);
+}
+
+.alf-search {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 1.5px solid var(--alf-line);
+  border-radius: var(--alf-r-md);
+  padding: 12px 16px;
+  color: var(--alf-ink);
+}
+.alf-search input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font: 500 15px var(--alf-font-body); color: var(--alf-ink);
+}
+.alf-search input::placeholder { color: var(--alf-ink-mute); }
+
+/* ── Wireframe primitives ─────────────────────────────────── */
+.wf {
+  background: #fafaf7;
+  color: #2a2a2a;
+  font-family: "JetBrains Mono", "Menlo", monospace;
+  font-size: 13px;
+  height: 100%; width: 100%;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+.wf-box {
+  border: 1.5px solid #cdcdc6;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+}
+.wf-box--dashed { border-style: dashed; }
+.wf-box--filled { background: #ebe9e1; }
+.wf-h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px; letter-spacing: -.3px; }
+.wf-h2 { font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #555; }
+.wf-label { font-size: 11px; color: #888; letter-spacing: .04em; text-transform: uppercase; }
+.wf-thumb {
+  background: repeating-linear-gradient(45deg, #ebe9e1, #ebe9e1 6px, #f4f3ee 6px, #f4f3ee 12px);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: #999; font-size: 11px;
+}
+
+/* Methodology modal — always-visible scrollbar */
+.alf-docscroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: var(--alf-sky-deep) #DBEEF9;
+}
+.alf-docscroll::-webkit-scrollbar {
+  width: 16px;
+}
+.alf-docscroll::-webkit-scrollbar-track {
+  background: #DBEEF9;
+  border-left: 1px solid #B5D9F0;
+}
+.alf-docscroll::-webkit-scrollbar-thumb {
+  background: var(--alf-sky-deep);
+  border-radius: 8px;
+  border: 3px solid #DBEEF9;
+  min-height: 60px;
+}
+.alf-docscroll::-webkit-scrollbar-thumb:hover {
+  background: #2D8FC4;
+}

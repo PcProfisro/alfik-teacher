@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.58537;">
+    <g transform="matrix(1,0,0,1,-5101,-13105)">
+        <g transform="matrix(0.498997,0,0,0.0592082,4329.3,12787.5)">
+            <g id="cisla_a_vztahy" transform="matrix(0.605684,0,0,2.10559,693.655,-8546.33)">
+                <g transform="matrix(1,0,0,2.42431,-8587.52,4384.81)">
+                    <circle cx="10050.8" cy="969.978" r="49.743" style="fill:none;stroke:rgb(0,136,204);stroke-width:4.43px;"></circle>
+                </g>
+                <g transform="matrix(0.90129,0,0,0.90129,-210.931,1055.15)">
+                    <g transform="matrix(1.61191,0,0,3.90776,-24014.3,-27919.2)">
+                        <g transform="matrix(0.991633,0,0,1,134.104,0)">
+                            <g transform="matrix(21.9877,0,0,21.9877,16040.5,8774.16)">
+                            </g>
+                            <text x="16027.4px" y="8774.16px" style="font-family:&#39;ArialRoundedMTBold&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif;font-size:21.988px;fill:rgb(0,136,204);">2</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1.61191,0,0,3.90776,-23989.7,-28014.1)">
+                        <g transform="matrix(0.991633,0,0,1,134.104,0)">
+                            <g transform="matrix(21.9877,0,0,21.9877,16040.5,8774.16)">
+                            </g>
+                            <text x="16027.4px" y="8774.16px" style="font-family:&#39;ArialRoundedMTBold&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif;font-size:21.988px;fill:rgb(0,136,204);">1</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1.61191,0,0,3.90776,-23961.1,-27919.2)">
+                        <g transform="matrix(0.991633,0,0,1,134.104,0)">
+                            <g transform="matrix(21.9877,0,0,21.9877,16040.5,8774.16)">
+                            </g>
+                            <text x="16027.4px" y="8774.16px" style="font-family:&#39;ArialRoundedMTBold&#39;, &#39;Arial Rounded MT Bold&#39;, sans-serif;font-size:21.988px;fill:rgb(0,136,204);">3</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(0.920418,-0.192932,-0.0795824,2.23138,-12243.4,-10105.9)">
+                        <path d="M16084.1,8729.75L16097.1,8742.8" style="fill:none;stroke:rgb(0,136,204);stroke-width:4.53px;"></path>
+                    </g>
+                    <g transform="matrix(-0.920418,-0.192932,0.0795824,2.23138,15957.9,-10105.9)">
+                        <path d="M16084.1,8729.75L16097.1,8742.8" style="fill:none;stroke:rgb(0,136,204);stroke-width:4.53px;"></path>
+                    </g>
+                    <g transform="matrix(0.707107,-1.71425,0.707107,1.71425,-15698,18948.1)">
+                        <path d="M16084.1,8729.75L16097.1,8742.8" style="fill:none;stroke:rgb(0,136,204);stroke-width:3.81px;"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

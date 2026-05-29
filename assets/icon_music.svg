@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 39 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.58537;">
+    <g transform="matrix(1,0,0,1,-3009,-14756)">
+        <g transform="matrix(0.656041,0,0,0.119338,1728.95,13980.7)">
+            <g id="icon_music" transform="matrix(0.760619,0,0,1,558.424,-1.45519e-11)">
+                <g transform="matrix(0.568632,0,0,0.568632,475.753,3119.76)">
+                    <g transform="matrix(2.14203,0,0,8.95661,-4657.25,-124899)">
+                        <circle cx="3308.71" cy="14652.1" r="4.115" style="fill:none;stroke:rgb(75,81,240);stroke-width:2.77px;"></circle>
+                    </g>
+                    <g transform="matrix(2.14203,0,0,8.95661,-4619.7,-124944)">
+                        <circle cx="3308.71" cy="14652.1" r="4.115" style="fill:none;stroke:rgb(75,81,240);stroke-width:2.77px;"></circle>
+                    </g>
+                    <g transform="matrix(2.00402,0,0,8.37954,-4233.24,-116514)">
+                        <path d="M3329.39,14660L3329.39,14638.7L3348.13,14632.9L3348.13,14655.1" style="fill:none;stroke:rgb(75,81,240);stroke-width:2.96px;"></path>
+                    </g>
+                    <g transform="matrix(2.00402,0,0,8.37954,-4233.24,-116532)">
+                        <path d="M3348.13,14642.7L3329.39,14648.5" style="fill:none;stroke:rgb(75,81,240);stroke-width:2.96px;"></path>
+                    </g>
+                </g>
+                <g transform="matrix(2.11402,-8.22024e-46,0,8.91407,-2709.92,-6140.98)">
+                    <circle cx="2166.67" cy="1436.2" r="16.483" style="fill:none;stroke:rgb(75,81,240);stroke-width:2.79px;stroke-linecap:round;"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 36 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.58537;">
+    <g transform="matrix(1,0,0,1,-5253,-13105)">
+        <g transform="matrix(0.498997,0,0,0.0592082,4329.3,12787.5)">
+            <g id="_5-6-years" transform="matrix(1,0,0,1,-25.7762,-25.868)">
+                <g transform="matrix(0.360046,4.62252e-46,0,9.8916,1859.11,-86869.3)">
+                    <g transform="matrix(0.836366,0,0,0.256569,-6537.92,5034.31)">
+                        <path d="M7891.85,16783.4L7974.96,16783.4L7995.62,16796.8L8013.34,16783.4L8099.39,16783.4L8099.39,16914.6C8099.39,16914.6 8011.09,16914.5 8011.09,16914.6C8011.09,16922 8003.3,16927.4 7995.62,16927.4C7987.94,16927.4 7980.16,16922 7980.16,16914.6C7980.16,16914.5 7891.85,16914.6 7891.85,16914.6L7891.85,16783.4Z" style="fill:rgb(20,112,186);stroke:black;stroke-width:6.45px;"></path>
+                    </g>
+                    <g transform="matrix(0.836366,0,0,0.256569,-6537.92,5034.31)">
+                        <path d="M7995.62,16790.8L7995.62,16911.7C7967.43,16893.1 7938.34,16887.8 7908.39,16895.2L7908.39,16770.8C7939.64,16762.9 7968.77,16769.2 7995.62,16790.8Z" style="fill:rgb(254,243,215);stroke:black;stroke-width:6.45px;"></path>
+                    </g>
+                    <g transform="matrix(-0.836366,0,0,0.256569,6836.61,5034.31)">
+                        <path d="M7995.62,16790.8L7995.62,16911.7C7967.43,16893.1 7938.34,16887.8 7908.39,16895.2L7908.39,16770.8C7939.64,16762.9 7968.77,16769.2 7995.62,16790.8Z" style="fill:rgb(254,243,215);stroke:black;stroke-width:6.45px;"></path>
+                    </g>
+                </g>
+                <g transform="matrix(2.08476,0,0,17.57,-8638.66,-222293)">
+                    <rect x="5044.79" y="12958.9" width="32.945" height="32.945" style="fill:none;"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
