@@ -6,15 +6,26 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Mulish:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Fredoka:wght@500;600;700&family=Baloo+2:wght@500;600;700;800&family=Mulish:wght@400;500;600;700;800;900&family=Cinzel:wght@600;700;800&family=Alfa+Slab+One&family=Bowlby+One+SC&family=Cabin+Sketch:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="styles.css">
   <style>
-    html, body, #root { margin: 0; padding: 0; height: 100%; }
-    body { font-family: "Mulish", system-ui, sans-serif; background: var(--alf-bg); }
-    #root { height: 100vh; overflow: hidden; }
-    /* each screen is <div class="alf-root" style="display:flex"> — fill the viewport */
-    #root > .alf-root { height: 100vh; }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #0f1923;
+    }
+    body { font-family: "Mulish", system-ui, sans-serif; }
+    #root {
+      width: 1440px;
+      height: 900px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      overflow: hidden;
+    }
+    .alf-root { height: 900px !important; }
   </style>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -24,10 +35,26 @@
 <body>
   <div id="root"></div>
 
-  <script type="text/babel" src="shared.jsx"></script>
-  <script type="text/babel" src="teacher.jsx"></script>
-  <script type="text/babel" src="teacher-1c.jsx"></script>
-  <script type="text/babel" src="teacher-1d.jsx"></script>
-  <script type="text/babel" src="teacher-app.jsx"></script>
+  <script>
+    function scalePortal() {
+      var s = Math.min(window.innerWidth / 1440, window.innerHeight / 900);
+      var r = document.getElementById('root');
+      if (r) r.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+    }
+    window.addEventListener('resize', scalePortal);
+    scalePortal();
+  </script>
+
+  <script src="image-slot.js"></script>
+  <script type="text/babel" src="shared.jsx"?v=1" charset="utf-8"></script>
+  <script type="text/babel" src="teacher.jsx"?v=1" charset="utf-8"></script>
+  <script type="text/babel" src="teacher-1c.jsx"?v=1" charset="utf-8"></script>
+  <script type="text/babel" src="teacher-1d.jsx"?v=1" charset="utf-8"></script>
+  <script type="text/babel" src="ucitelsky-portal-nav.jsx"?v=1" charset="utf-8"></script>
+
+  <script type="text/babel">
+    const portalRoot = ReactDOM.createRoot(document.getElementById('root'));
+    portalRoot.render(<TeacherPortalRouter />);
+  </script>
 </body>
 </html>

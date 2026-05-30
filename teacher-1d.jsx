@@ -83,11 +83,84 @@ function HistoryTable({ entries }) {
   );
 }
 
+// Recommended materials — same row format as HistoryTable, first column is a reason badge.
+const RECOMMENDED = [
+  { mId: 'm10', reason: 'Novinka',     tone: 'mint' },
+  { mId: 'm2',  reason: 'Pre váš vek', tone: 'sky'  },
+  { mId: 'm5',  reason: 'Obľúbené',    tone: 'sun'  },
+];
+
+function RecommendedTable({ entries }) {
+  const TONE = {
+    mint: { bg: 'var(--alf-mint-bg)', ink: 'var(--alf-mint-deep)' },
+    sky:  { bg: 'var(--alf-sky-bg)',  ink: 'var(--alf-sky-ink)'   },
+    sun:  { bg: 'var(--alf-sun-bg)',  ink: 'var(--alf-sun-deep)'  },
+  };
+  const [assigns, setAssigns] = React.useState({});
+  const toggleAssign = (mId, lId) => setAssigns((prev) => {
+    const cur = prev[mId] || [];
+    return { ...prev, [mId]: cur.includes(lId) ? cur.filter((x) => x !== lId) : [...cur, lId] };
+  });
+  return (
+    <div style={{ background: '#fff', borderRadius: 18, boxShadow: 'var(--alf-shadow-card)', overflow: 'visible' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '120px 80px 1fr 200px',
+        gap: 16, padding: '14px 22px',
+        fontSize: 11, fontWeight: 700, color: 'var(--alf-ink-mute)',
+        letterSpacing: '.06em', textTransform: 'uppercase',
+        borderBottom: '1px solid var(--alf-line)',
+      }}>
+        <span>Dôvod</span>
+        <span></span>
+        <span>Názov</span>
+        <span>Pridať do hodiny</span>
+      </div>
+
+      {entries.map((r, idx) => {
+        const m = MATERIALS.find(mm => mm.id === r.mId);
+        if (!m) return null;
+        const isLast = idx === entries.length - 1;
+        const tone = TONE[r.tone] || TONE.sky;
+        return (
+          <div key={idx} style={{
+            display: 'grid',
+            gridTemplateColumns: '120px 80px 1fr 200px',
+            gap: 16, padding: '12px 22px', alignItems: 'center',
+            borderBottom: isLast ? 'none' : '1px solid var(--alf-line)',
+            transition: 'background .12s',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.background = 'var(--alf-bg)'}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+            <div>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center',
+                padding: '5px 12px', borderRadius: 99,
+                background: tone.bg, color: tone.ink,
+                fontSize: 12, fontWeight: 800,
+              }}>{r.reason}</span>
+            </div>
+            <PlayButton material={m} size={56} />
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--alf-ink)', lineHeight: 1.25 }}>{m.name}</div>
+              <div style={{ marginTop: 3, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <CategoryPath material={m} />
+                <SvpPath material={m} />
+              </div>
+            </div>
+            <LessonChips assignedIds={assigns[m.id] || []} onToggle={(lId) => toggleAssign(m.id, lId)} chipColor="var(--alf-sky)" />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Teacher_1D_History() {
   const [tag, setTag] = React.useState('all');
   const tags = [
     { id: 'all',           label: 'Všetky' },
-    { id: 'testy',         label: 'Testy' },
+    { id: 'testy',         label: 'Cvičenia' },
     { id: 'pesničky',      label: 'Pesničky' },
     { id: 'videá',         label: 'Videá' },
     { id: 'maľovanky',     label: 'Maľovanky' },
@@ -140,4 +213,4 @@ function Teacher_1D_History() {
   );
 }
 
-Object.assign(window, { Teacher_1D_History });
+Object.assign(window, { Teacher_1D_History, RecommendedTable, RECOMMENDED });

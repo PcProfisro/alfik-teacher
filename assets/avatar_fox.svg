@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <clipPath id="foxClip"><circle cx="50" cy="50" r="50"></circle></clipPath>
+  </defs>
+  <g clip-path="url(#foxClip)">
+    <rect width="100" height="100" fill="#FFE7BE"></rect>
+    
+    <path d="M24 30 L34 8 L46 34 Z" fill="#F47B33"></path>
+    <path d="M76 30 L66 8 L54 34 Z" fill="#F47B33"></path>
+    <path d="M30 27 L35 16 L41 31 Z" fill="#FFD2B0"></path>
+    <path d="M70 27 L65 16 L59 31 Z" fill="#FFD2B0"></path>
+    
+    <path d="M50 24 C72 24 80 42 80 58 C80 80 66 92 50 92 C34 92 20 80 20 58 C20 42 28 24 50 24 Z" fill="#F89A4E"></path>
+    
+    <path d="M50 50 C62 50 70 60 70 72 C70 84 60 92 50 92 C40 92 30 84 30 72 C30 60 38 50 50 50 Z" fill="#FFF4EA"></path>
+    
+    <circle cx="39" cy="52" r="6" fill="#3A2A22"></circle>
+    <circle cx="61" cy="52" r="6" fill="#3A2A22"></circle>
+    <circle cx="41" cy="50" r="2" fill="#fff"></circle>
+    <circle cx="63" cy="50" r="2" fill="#fff"></circle>
+    
+    <path d="M50 66 C46 66 43 68 43 71 C43 74 47 76 50 76 C53 76 57 74 57 71 C57 68 54 66 50 66 Z" fill="#3A2A22"></path>
+    
+    <circle cx="33" cy="66" r="4" fill="#FFC1A3" opacity="0.8"></circle>
+    <circle cx="67" cy="66" r="4" fill="#FFC1A3" opacity="0.8"></circle>
+  </g>
+</svg>

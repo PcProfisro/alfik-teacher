@@ -140,6 +140,18 @@ function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest 
               <span style={{ opacity: .7, letterSpacing: '.08em' }}>VEK</span>
               <span>{AGE_META[lesson.age]?.label || lesson.age}</span>
             </span>
+            {lesson.dateRange && (
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '3px 10px', borderRadius: 99,
+                background: 'var(--alf-sky-bg)', color: 'var(--alf-sky-ink)',
+                fontSize: 11, fontWeight: 800, letterSpacing: '.02em',
+                fontVariantNumeric: 'tabular-nums',
+              }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
+                <span>{lesson.dateRange}</span>
+              </span>
+            )}
           </div>
           <div style={{ fontFamily: 'var(--alf-font-display)', fontSize: 18, fontWeight: 700, color: 'var(--alf-ink)', marginTop: 4, lineHeight: 1.2 }}>{lesson.name}</div>
         </div>
@@ -198,11 +210,28 @@ function SeasonFilter({ value, onChange }) {
 }
 
 // ─── New / edit lesson modal ────────────────────────────────────────────
+function parseDateRange(r) {
+  if (!r) return { from: '', to: '' };
+  const [a, b = ''] = r.split('-');
+  const to = b.match(/(\d+)\.(\d+)\.(\d+)/);   // d.m.y
+  const from = a.match(/(\d+)\.(\d+)\./);       // d.m.
+  if (!to) return { from: '', to: '' };
+  const pad = (n) => String(n).padStart(2, '0');
+  const year = to[3];
+  return {
+    from: from ? `${year}-${pad(from[2])}-${pad(from[1])}` : '',
+    to: `${year}-${pad(to[2])}-${pad(to[1])}`,
+  };
+}
+
 function NewLessonModal({ open, onClose, lesson }) {
   const isEdit = !!lesson;
+  const _range = parseDateRange(lesson?.dateRange);
   const [name, setName] = React.useState(lesson?.name || '');
   const [season, setSeason] = React.useState(lesson?.season || 'Jar');
   const [age, setAge] = React.useState(lesson?.age || '4');
+  const [dateFrom, setDateFrom] = React.useState(_range.from);
+  const [dateTo, setDateTo] = React.useState(_range.to);
   const [catOpen, setCatOpen] = React.useState(false);
   const [theme, setTheme] = React.useState(lesson?.theme || 'Domáce zvieratá');
   const [svpOpen, setSvpOpen] = React.useState(false);
@@ -299,6 +328,15 @@ function NewLessonModal({ open, onClose, lesson }) {
               </div>
             </Field>
           </div>
+
+          {/* Termín — dátumový interval */}
+          <Field label="Termín">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} style={{ ...inputStyle, flex: 1 }} />
+              <span style={{ color: 'var(--alf-ink-mute)', fontWeight: 800 }}>–</span>
+              <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} style={{ ...inputStyle, flex: 1 }} />
+            </div>
+          </Field>
 
           {/* Stav hodiny */}
           <Field label="Stav">
@@ -398,7 +436,7 @@ function NewLessonModal({ open, onClose, lesson }) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
         }}>
           <div style={{ fontSize: 12, color: 'var(--alf-ink-mute)' }}>
-            {isEdit ? `Hodina obsahuje ${lesson.tests?.length || 0} testov.` : 'Testy môžeš pridať po vytvorení hodiny.'}
+            {isEdit ? `Hodina obsahuje ${lesson.tests?.length || 0} cvičení.` : 'Cvičenia môžeš pridať po vytvorení hodiny.'}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={onClose} className="alf-btn">Zrušiť</button>
@@ -716,7 +754,7 @@ function DeleteLessonModal({ lesson, onClose }) {
               Skutočne chcete zmazať hodinu „{lesson.name}"?
             </h2>
             <div style={{ fontSize: 13.5, color: 'var(--alf-ink-soft)', lineHeight: 1.45 }}>
-              Hodina obsahuje {lesson.tests?.length || 0} priradených testov. Testy samotné sa nezmažú — len ich priradenie k tejto hodine.
+              Hodina obsahuje {lesson.tests?.length || 0} priradených cvičení. Cvičenia samotné sa nezmažú — len ich priradenie k tejto hodine.
             </div>
           </div>
         </div>
@@ -790,7 +828,7 @@ function Teacher_1C_Lessons() {
   const [statusFilter, setStatusFilter] = React.useState('all');
   const tags = [
     { id: 'all',           label: 'Všetky' },
-    { id: 'testy',         label: 'Testy' },
+    { id: 'testy',         label: 'Cvičenia' },
     { id: 'pesničky',      label: 'Pesničky' },
     { id: 'videá',         label: 'Videá' },
     { id: 'maľovanky',     label: 'Maľovanky' },
@@ -1093,7 +1131,7 @@ function AddMaterialsModal({ lesson, onClose }) {
               <div style={{ display: 'flex', gap: 6, padding: 4, background: 'var(--alf-bg)', borderRadius: 99, border: '1px solid var(--alf-line)' }}>
                 {[
                   { id: 'all',           label: 'Všetky' },
-                  { id: 'testy',         label: 'Testy' },
+                  { id: 'testy',         label: 'Cvičenia' },
                   { id: 'pesničky',      label: 'Pesničky' },
                   { id: 'videá',         label: 'Videá' },
                   { id: 'maľovanky',     label: 'Maľovanky' },

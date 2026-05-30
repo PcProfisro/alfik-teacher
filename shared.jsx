@@ -85,7 +85,7 @@ function AgePopover({ value, onPick }) {
 // ─── Teacher sidebar (left rail) ────────────────────────────────────────
 const NAV_ITEMS = [
   { key: 'dashboard', label: 'Prehľad',          icon: 'dashboard' },
-  { key: 'materials', label: 'Učebné materiály', icon: 'materials' },
+  { key: 'materials', label: 'Knižnica', icon: 'materials' },
   { key: 'classes',   label: 'Moje hodiny',      icon: 'classes' },
   { key: 'history',   label: 'História',         icon: 'history' },
 ];
@@ -104,8 +104,9 @@ function NavIcon({ k }) {
 }
 
 const MATERIALS_SUBS = [
-  { key: 'temy', label: 'Témy' },
   { key: 'svp',  label: 'ŠVP' },
+  { key: 'temy', label: 'Témy' },
+  { key: 'typy', label: 'Typy' },
   { key: 'mine', label: 'Moje' },
 ];
 
@@ -307,7 +308,7 @@ function ProfileItemIcon({ k }) {
   }
 }
 
-function ProfileFooter({ teacherName, role = 'teacher', collapsed = false }) {
+function ProfileFooter({ teacherName, role = 'teacher', collapsed = false, avatarSlot = null, avatarImg = null, avatarSize = 36 }) {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef(null);
   React.useEffect(() => {
@@ -334,12 +335,27 @@ function ProfileFooter({ teacherName, role = 'teacher', collapsed = false }) {
         border: 'none', cursor: 'pointer', textAlign: 'left',
         transition: 'background .12s',
       }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 99,
-          background: 'linear-gradient(135deg, var(--alf-coral), var(--alf-sun-deep))',
-          color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontWeight: 800, fontSize: 14, fontFamily: 'var(--alf-font-display)', flexShrink: 0,
-        }}>{initial}</div>
+        {avatarImg ? (
+          <img
+            src={avatarImg}
+            alt={teacherName}
+            style={{ width: avatarSize, height: avatarSize, borderRadius: '50%', flexShrink: 0, display: 'block', objectFit: 'cover', boxShadow: '0 0 0 3px rgba(255,255,255,.9)' }}
+          />
+        ) : avatarSlot ? (
+          <image-slot
+            id={avatarSlot}
+            shape="circle"
+            placeholder="Foto"
+            style={{ width: avatarSize, height: avatarSize, borderRadius: '50%', flexShrink: 0, display: 'block', boxShadow: '0 0 0 3px rgba(255,255,255,.9)' }}
+          ></image-slot>
+        ) : (
+          <div style={{
+            width: avatarSize, height: avatarSize, borderRadius: 99,
+            background: 'linear-gradient(135deg, var(--alf-coral), var(--alf-sun-deep))',
+            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 800, fontSize: 14, fontFamily: 'var(--alf-font-display)', flexShrink: 0,
+          }}>{initial}</div>
+        )}
         {!collapsed && (
           <>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -348,8 +364,6 @@ function ProfileFooter({ teacherName, role = 'teacher', collapsed = false }) {
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--alf-ink-mute)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{
               flexShrink: 0,
-              transition: 'transform .15s ease',
-              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
             }}><path d="m9 6 6 6-6 6"/></svg>
           </>
         )}
@@ -530,7 +544,7 @@ function MaterialTag({ kind }) {
       padding: '3px 8px', borderRadius: 99, background: m.bg, color: m.fg,
       fontSize: 11, fontWeight: 700, letterSpacing: '.02em',
     }}>
-      <span style={{ fontSize: 9 }}>{m.icon}</span>{kind}
+      <span style={{ fontSize: 9 }}>{m.icon}</span>{kind === 'testy' ? 'cvičenia' : kind}
     </span>
   );
 }
@@ -546,7 +560,7 @@ function MaterialTagIcon({ kind, size = 30 }) {
   };
   const m = map[kind] || map['videá'];
   return (
-    <span title={kind} style={{
+    <span title={kind === 'testy' ? 'cvičenia' : kind} style={{
       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
       width: size, height: size, borderRadius: 10, background: m.bg, color: m.fg,
     }}>
@@ -570,15 +584,15 @@ function TagGlyph({ kind, size = 16 }) {
 // Sample lessons — each test can be assigned to multiple lessons.
 // Used by 1C Lessons screen + 1B "Moja hodina" assignment column.
 const LESSONS = [
-  { id: 'l1', weekday: 'Po', date: '10. mar', season: 'Jar', name: 'Spoznávame zvieratá',     age: '4', status: 'next',  color: 'var(--alf-sky-deep)', tests: ['m1', 'm10', 'm8'],
+  { id: 'l1', weekday: 'Po', date: '10. mar', dateRange: '1.6.-12.7.2026', season: 'Jar', name: 'Spoznávame zvieratá',     age: '4', status: 'next',  color: 'var(--alf-sky-deep)', tests: ['m1', 'm10', 'm8'],
     theme: 'Domáce zvieratá',     svp: 'Živá príroda',                       notes: 'Pripraviť obrázkové karty zvierat. Pieseň „Kohútik jarabý". Vychádzka na blízku farmu — ak počasie dovolí.' },
-  { id: 'l2', weekday: 'Ut', date: '11. mar', season: 'Jar', name: 'Počítame a triedime',     age: '4', status: 'next',  color: 'var(--alf-mint-deep)', tests: ['m2', 'm7'],
+  { id: 'l2', weekday: 'Ut', date: '11. mar', dateRange: '15.6.-26.7.2026', season: 'Jar', name: 'Počítame a triedime',     age: '4', status: 'next',  color: 'var(--alf-mint-deep)', tests: ['m2', 'm7'],
     theme: 'Čísla',               svp: 'Matematika a práca s informáciami',  notes: 'Stavebnice na triedenie podľa farby a veľkosti. Počítadlo 1–5, kartičky s bodkami.' },
-  { id: 'l3', weekday: 'St', date: '12. mar', season: 'Jar', name: 'Farby a tvary okolo nás', age: '3', status: 'draft', color: 'var(--alf-coral)', tests: ['m3', 'm7'],
+  { id: 'l3', weekday: 'St', date: '12. mar', dateRange: '8.6.-19.7.2026', season: 'Jar', name: 'Farby a tvary okolo nás', age: '3', status: 'draft', color: 'var(--alf-coral)', tests: ['m3', 'm7'],
     theme: 'Farby',               svp: 'Človek a svet práce',                notes: 'Maľovanie prstami — farebné kruhy. Hra na hľadanie predmetov podľa farby.' },
-  { id: 'l4', weekday: 'Št', date: '13. mar', season: 'Jar', name: 'Hudba a pohyb',           age: '5', status: 'draft', color: 'var(--alf-grape)', tests: ['m6', 'm8', 'm4'],
+  { id: 'l4', weekday: 'Št', date: '13. mar', dateRange: '22.6.-2.8.2026', season: 'Jar', name: 'Hudba a pohyb',           age: '5', status: 'draft', color: 'var(--alf-grape)', tests: ['m6', 'm8', 'm4'],
     theme: 'Hudba',               svp: 'Umenie a kultúra',                   notes: 'Rytmické nástroje (paličky, bubienky). Tanečná hra „Mlynček", spievanie v kruhu.' },
-  { id: 'l5', weekday: 'Pi', date: '14. mar', season: 'Jar', name: 'Cestujeme bezpečne',      age: '5', status: 'next',  color: 'var(--alf-sun-deep)', tests: ['m5', 'm9'],
+  { id: 'l5', weekday: 'Pi', date: '14. mar', dateRange: '29.6.-9.8.2026', season: 'Jar', name: 'Cestujeme bezpečne',      age: '5', status: 'next',  color: 'var(--alf-sun-deep)', tests: ['m5', 'm9'],
     theme: 'Doprava',             svp: 'Človek a spoločnosť',                notes: 'Magnetické autíčka, semafor, makety križovatky. Pieseň „Pri cestičke autíčko".' },
 ];
 

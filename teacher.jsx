@@ -101,7 +101,13 @@ function Teacher_1A_Dashboard({ age = 'all', onAgeChange }) {
             <KPICard accent="var(--alf-coral)"    label="Materiálov priradených" value="9" delta="3 nové" deltaUp />
           </section>
 
-          {/* Moje posledné aktivity — prvé 3 riadky z 1D */}
+          {/* Odporúčané materiály — horná polovica */}
+          <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <h2 style={{ fontFamily: 'var(--alf-font-display)', fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--alf-ink)' }}>Odporúčané materiály</h2>
+            <RecommendedTable entries={RECOMMENDED} />
+          </section>
+
+          {/* Moje posledné aktivity — pod tým, rovnaký formát */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <h2 style={{ fontFamily: 'var(--alf-font-display)', fontSize: 18, fontWeight: 700, margin: 0, color: 'var(--alf-ink)' }}>Moje posledné aktivity</h2>
             <HistoryTable entries={HISTORY.slice(0, 3)} />
@@ -990,9 +996,57 @@ function ThemeTreePanel({ selected, onSelect, header, empty = false, mode = 'tem
   );
 }
 
+// ─── Type tree panel (1B4) — flat, first-level material types only ──────
+const MATERIAL_TYPES = [
+  { id: 'testy',         name: 'Cvičenia',      count: 58, bg: 'var(--alf-mint-bg)',   fg: '#1E7A5E' },
+  { id: 'pesničky',      name: 'Pesničky',      count: 32, bg: 'var(--alf-grape-bg)',  fg: '#5B47D6' },
+  { id: 'videá',         name: 'Videá',         count: 28, bg: 'var(--alf-coral-bg)',  fg: '#A94545' },
+  { id: 'maľovanky',     name: 'Maľovanky',     count: 21, bg: 'var(--alf-sun-bg)',    fg: '#8C6500' },
+  { id: 'grafomotorika', name: 'Grafomotorika', count: 12, bg: 'var(--alf-orange-bg)', fg: '#A65A33' },
+];
+
+function TypeTreePanel({ selected, onSelect }) {
+  return (
+    <aside style={{
+      width: 280, flexShrink: 0,
+      background: '#fff', borderRight: '1px solid var(--alf-line)',
+      display: 'flex', flexDirection: 'column', overflow: 'hidden',
+    }}>
+      <div style={{ padding: '20px 20px 12px', borderBottom: '1px solid var(--alf-line)' }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--alf-ink-mute)', letterSpacing: '.1em', textTransform: 'uppercase' }}>Typy</div>
+      </div>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 8px 16px' }}>
+        {MATERIAL_TYPES.map((t) => {
+          const isActive = t.id === selected;
+          return (
+            <button key={t.id} onClick={() => onSelect?.(t.id)} style={{
+              width: '100%', textAlign: 'left',
+              display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px',
+              borderRadius: 10, background: isActive ? 'var(--alf-sky-bg)' : 'transparent',
+              boxShadow: isActive ? 'inset 2px 0 0 var(--alf-sky-deep)' : 'none',
+              border: 'none', cursor: 'pointer',
+              fontSize: 13.5, fontWeight: isActive ? 700 : 600,
+              color: isActive ? 'var(--alf-ink)' : 'var(--alf-ink-soft)',
+            }}>
+              <span style={{
+                width: 26, height: 26, borderRadius: 8, flexShrink: 0,
+                background: t.bg, color: t.fg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}><TagGlyph kind={t.id} size={15} /></span>
+              <span style={{ flex: 1 }}>{t.name}</span>
+              <span style={{ fontSize: 11, color: 'var(--alf-ink-mute)', fontWeight: 600 }}>{t.count}</span>
+            </button>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
+
 // ─── 1C · Materials data list ───────────────────────────────────────────
 function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
   const [tag, setTag] = React.useState('all');
+  const [selectedType, setSelectedType] = React.useState('testy');
   const [selectedSub, setSelectedSub] = React.useState(view === 'svp' ? null : 'farm');
   const [catOpen, setCatOpen] = React.useState(true); // shown open by default
   const [tagsOpen, setTagsOpen] = React.useState(false);
@@ -1009,7 +1063,7 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
   }, [tagsOpen]);
   const tags = [
     { id: 'all',           label: 'Všetky' },
-    { id: 'testy',         label: 'Testy' },
+    { id: 'testy',         label: 'Cvičenia' },
     { id: 'pesničky',      label: 'Pesničky' },
     { id: 'videá',         label: 'Videá' },
     { id: 'maľovanky',     label: 'Maľovanky' },
@@ -1017,6 +1071,7 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
   ];
   const filtered = MATERIALS.filter(m => {
     if (tag !== 'all' && !m.tags.includes(tag)) return false;
+    if (view === 'typy' && selectedType && !m.tags.includes(selectedType)) return false;
     if (age !== 'all' && !m.ages.includes(age)) return false;
     if (view === 'mine' && !m.mine) return false;
     return true;
@@ -1045,9 +1100,10 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
     <div className="alf-root" style={{ display: 'flex' }}>
       <TeacherSidebar active="materials" materialsSub={view} />
       {(view === 'temy' || view === 'svp') && <ThemeTreePanel selected={selectedSub} onSelect={setSelectedSub} mode={view} />}
+      {view === 'typy' && <TypeTreePanel selected={selectedType} onSelect={setSelectedType} />}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <TeacherTopBar
-          title={view === 'mine' ? 'Moje materiály' : view === 'svp' ? 'Učebné materiály · ŠVP' : 'Učebné materiály'}
+          title={view === 'mine' ? 'Moje materiály' : view === 'svp' ? 'Knižnica · ŠVP' : view === 'typy' ? 'Knižnica · Typy' : 'Knižnica'}
           hideAge
           search={false}
         >
@@ -1186,7 +1242,8 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
             </div>
           </div>
 
-          {/* Second filter row — material kind chips */}
+          {/* Second filter row — material kind chips (skrytý v zobrazení Typy — filter je v strome) */}
+          {view !== 'typy' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', gap: 6, padding: 4, background: '#fff', borderRadius: 99, border: '1px solid var(--alf-line)' }} data-row="tags-bottom">
               {tags.map((t) => (
@@ -1199,9 +1256,10 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
               ))}
             </div>
           </div>
+          )}
 
           {/* table — columns: Vek · Play · Názov · Zručnosti · Actions */}
-          <MaterialsTable filtered={filtered} showActions={view === 'mine'} pathLabel={view === 'svp' ? 'ŠVP' : 'TÉMA'} extraPath={view === 'mine' ? 'ŠVP' : null} />
+          <MaterialsTable filtered={filtered} showActions={view === 'mine'} pathLabel={view === 'svp' || view === 'typy' ? 'ŠVP' : 'TÉMA'} extraPath={view === 'mine' ? 'ŠVP' : null} />
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--alf-ink-mute)' }}>
             <span>Zobrazené {filtered.length} z 151</span>
@@ -1311,7 +1369,12 @@ function PathTooltip({ path }) {
 function MaterialsTable({ filtered, showActions = true, pathLabel = 'TÉMA', extraPath = null }) {
   const [editingMat, setEditingMat] = React.useState(null);
   const [deletingMat, setDeletingMat] = React.useState(null);
-  const cols = showActions ? '80px 1fr 220px 90px' : '80px 1fr 220px';
+  const [assigns, setAssigns] = React.useState({});
+  const toggleAssign = (mId, lId) => setAssigns((prev) => {
+    const cur = prev[mId] || [];
+    return { ...prev, [mId]: cur.includes(lId) ? cur.filter((x) => x !== lId) : [...cur, lId] };
+  });
+  const cols = showActions ? '80px 1fr 220px 210px 90px' : '80px 1fr 220px 210px';
 
   return (
     <>
@@ -1327,6 +1390,7 @@ function MaterialsTable({ filtered, showActions = true, pathLabel = 'TÉMA', ext
         <span></span>
         <span>Názov</span>
         <span>Zručnosti</span>
+        <span>Pridať do hodiny</span>
         {showActions && <span></span>}
       </div>
       {filtered.map((m, idx) => {
@@ -1363,6 +1427,7 @@ function MaterialsTable({ filtered, showActions = true, pathLabel = 'TÉMA', ext
                 <CurricularTagIcon key={t.id} tag={t} size={32} />
               ))}
             </div>
+            <LessonChips assignedIds={assigns[m.id] || []} onToggle={(lId) => toggleAssign(m.id, lId)} chipColor="var(--alf-sky)" />
             {showActions && (
               <div style={{ display: 'flex', gap: 4, justifyContent: 'flex-end' }}>
                 {m.mine && (
@@ -1575,7 +1640,7 @@ function LessonChips({ assignedIds, onToggle, onGoto, readOnly = false, chipColo
         }}>
           <div style={{ padding: '12px 14px 8px', borderBottom: '1px solid var(--alf-line)' }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--alf-ink-mute)', letterSpacing: '.08em', textTransform: 'uppercase' }}>Priradiť k hodine</div>
-            <div style={{ fontSize: 12, color: 'var(--alf-ink-soft)', marginTop: 3 }}>Test môže byť vo viacerých hodinách súčasne.</div>
+            <div style={{ fontSize: 12, color: 'var(--alf-ink-soft)', marginTop: 3 }}>Cvičenie môže byť vo viacerých hodinách súčasne.</div>
             <div style={{
               display: 'flex', alignItems: 'center', gap: 8, marginTop: 10,
               padding: '8px 10px', borderRadius: 10,
