@@ -2,7 +2,7 @@
 
 function TeacherPortalRouter() {
   const [screen, setScreen]           = React.useState('dashboard');
-  const [materialsSub, setMaterialsSub] = React.useState('temy');
+  const [materialsSub, setMaterialsSub] = React.useState('svp');
   const [age, setAge]                 = React.useState('all');
 
   const navigate = React.useCallback((key, sub) => {
