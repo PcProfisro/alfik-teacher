@@ -1044,7 +1044,7 @@ function TypeTreePanel({ selected, onSelect }) {
 }
 
 // ─── 1C · Materials data list ───────────────────────────────────────────
-function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
+function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
   const [tag, setTag] = React.useState('all');
   const [selectedType, setSelectedType] = React.useState('testy');
   const [selectedSub, setSelectedSub] = React.useState(view === 'svp' ? null : 'farm');
@@ -1052,7 +1052,7 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'temy' }) {
   const [tagsOpen, setTagsOpen] = React.useState(false);
   const [tagFilter, setTagFilter] = React.useState(() => new Set(['knowledge', 'visual']));
   const [tagSearch, setTagSearch] = React.useState('');
-  const [scope, setScope] = React.useState('temy');   // 'temy' | 'svp'
+  const [scope, setScope] = React.useState(view);   // 'temy' | 'svp'
   const [matModalOpen, setMatModalOpen] = React.useState(false);
   const tagsRef = React.useRef(null);
   React.useEffect(() => {

@@ -150,7 +150,7 @@ function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName 
                 e.preventDefault();
                 if (isMaterials) {
                   if (!collapsed) setMaterialsOpen(o => !o);
-                  if (nav) nav.navigate('materials', materialsSub || 'temy');
+                  if (nav) nav.navigate('materials', materialsSub || 'svp');
                 } else if (nav) {
                   nav.navigate(it.key);
                 }
