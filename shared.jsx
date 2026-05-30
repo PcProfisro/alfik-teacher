@@ -110,7 +110,7 @@ const MATERIALS_SUBS = [
   { key: 'mine', label: 'Moje' },
 ];
 
-function TeacherSidebar({ active = 'library', materialsSub = 'temy', teacherName = 'Janka Usilovná' }) {
+function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName = 'Janka Usilovná' }) {
   const [materialsOpen, setMaterialsOpen] = React.useState(active === 'materials');
   const [collapsed, setCollapsed] = React.useState(false);
   const nav = React.useContext(TeacherNavCtx);
