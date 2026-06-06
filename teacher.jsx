@@ -498,6 +498,8 @@ function NewMaterialModal({ open, onClose, material }) {
     return { 'testy':'Dokument','pesničky':'Pesnička','videá':'Video','maľovanky':'Maľovanka','grafomotorika':'Grafomotorika' }[t] || 'Video';
   })());
   const fileRef = React.useRef(null);
+  const [uploadMode, setUploadMode] = React.useState('file');
+  const [url, setUrl] = React.useState(material?.url || '');
 
   if (!open) return null;
 
@@ -550,7 +552,21 @@ function NewMaterialModal({ open, onClose, material }) {
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="napr. Spoznaj zvieratá na farme" style={inputCss} />
           </Field>
 
-          <Field label="Súbor" required>
+          <Field label="Súbor / URL" required>
+            <div style={{ display: 'flex', gap: 4, padding: 4, background: 'var(--alf-bg)', borderRadius: 10, border: '1px solid var(--alf-line)', marginBottom: 12, alignSelf: 'flex-start' }}>
+              {[{ id: 'file', label: 'Vybrať súbor' }, { id: 'url', label: 'Vložiť URL' }].map(opt => (
+                <button key={opt.id} onClick={() => setUploadMode(opt.id)} style={{
+                  padding: '7px 16px', borderRadius: 7, border: 'none', cursor: 'pointer',
+                  background: uploadMode === opt.id ? '#fff' : 'transparent',
+                  color: uploadMode === opt.id ? 'var(--alf-sky-deep)' : 'var(--alf-ink-soft)',
+                  fontWeight: uploadMode === opt.id ? 700 : 600, fontSize: 13,
+                  boxShadow: uploadMode === opt.id ? '0 1px 3px rgba(0,0,0,.1)' : 'none',
+                  fontFamily: 'var(--alf-font-body)',
+                }}>{opt.label}</button>
+              ))}
+            </div>
+
+            {uploadMode === 'file' ? (
             <div style={{
               display: 'flex', alignItems: 'center', gap: 12,
               padding: 12, borderRadius: 14,
@@ -578,6 +594,26 @@ function NewMaterialModal({ open, onClose, material }) {
                 {filename ? 'Zmeniť' : 'Vybrať súbor'}
               </button>
             </div>
+            ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 14px', borderRadius: 12,
+                border: `1.5px solid ${url ? 'var(--alf-sky-deep)' : 'var(--alf-line)'}`,
+                background: url ? 'var(--alf-sky-bg)' : '#FAFBFD',
+              }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <input
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://..."
+                  style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 13.5, fontFamily: 'var(--alf-font-body)', color: 'var(--alf-ink)' }}
+                />
+                {url && <button onClick={() => setUrl('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--alf-ink-mute)', fontSize: 16, lineHeight: 1 }}>×</button>}
+              </div>
+              <div style={{ fontSize: 11.5, color: 'var(--alf-ink-mute)' }}>Sem vložte priamy odkaz na YouTube, Vimeo, Google Drive alebo iný zdroj.</div>
+            </div>
+            )}
           </Field>
 
           <Field label="Vek">
@@ -626,12 +662,6 @@ function NewMaterialModal({ open, onClose, material }) {
                   </button>
                 );
               })}
-            </div>
-          </Field>
-
-          <Field label="Téma">
-            <div onClick={() => setCatOpen(o => !o)} style={{ cursor: 'pointer' }}>
-              <CategoryDropdown selected={theme} open={catOpen} />
             </div>
           </Field>
 
@@ -803,6 +833,126 @@ function DeleteMaterialModalB({ material, onClose }) {
   );
 }
 
+// ─── Shared themes tree data (used by ThemeTreePanel + Typy dropdowns) ─
+const THEMES_TREE = [
+  { id: 'animals',  name: 'Zvieratá', materials: 28, subs: SUBCATS_ANIMALS },
+  { id: 'nature',   name: 'Príroda',  materials: 22, subs: [
+    { id: 'trees',   name: 'Stromy',           count: 5 },
+    { id: 'flowers', name: 'Kvety',            count: 4 },
+    { id: 'weather', name: 'Počasie',          count: 7 },
+    { id: 'seasons', name: 'Ročné obdobia',    count: 6 },
+  ] },
+  { id: 'numbers',  name: 'Čísla',    materials: 18, subs: [
+    { id: 'count5',  name: 'Počítanie do 5',   count: 6 },
+    { id: 'count10', name: 'Počítanie do 10',  count: 5 },
+    { id: 'shapes',  name: 'Tvary',            count: 4 },
+    { id: 'compare', name: 'Porovnávanie',     count: 3 },
+  ] },
+  { id: 'colors',   name: 'Farby',    materials: 12, subs: [
+    { id: 'basic',   name: 'Základné farby',   count: 7 },
+    { id: 'mixing',  name: 'Miešanie farieb',  count: 5 },
+  ] },
+  { id: 'alphabet', name: 'Abeceda',  materials: 16, subs: [
+    { id: 'letters', name: 'Písmená',          count: 10 },
+    { id: 'words',   name: 'Prvé slová',       count: 6 },
+  ] },
+  { id: 'transport',name: 'Doprava',  materials: 14, subs: [
+    { id: 'vehicles', name: 'Vozidlá',         count: 6 },
+    { id: 'traffic',  name: 'Pravidlá cestnej premávky', count: 5 },
+    { id: 'signs',    name: 'Dopravné značky', count: 3 },
+  ] },
+  { id: 'food',     name: 'Jedlo',    materials: 11, subs: [
+    { id: 'fruit',   name: 'Ovocie',           count: 4 },
+    { id: 'veggies', name: 'Zelenina',         count: 4 },
+    { id: 'meals',   name: 'Jedlá',            count: 3 },
+  ] },
+  { id: 'family',   name: 'Rodina',   materials: 9, subs: [
+    { id: 'parents', name: 'Rodičia',          count: 3 },
+    { id: 'siblings',name: 'Súrodenci',        count: 3 },
+    { id: 'grand',   name: 'Starí rodičia',    count: 3 },
+  ] },
+  { id: 'music',    name: 'Hudba',    materials: 8, subs: [
+    { id: 'instr',   name: 'Nástroje',         count: 4 },
+    { id: 'rhythm',  name: 'Rytmus',           count: 2 },
+    { id: 'songs',   name: 'Piesne',           count: 2 },
+  ] },
+  { id: 'body',     name: 'Telo a zdravie', materials: 13, subs: [
+    { id: 'parts',   name: 'Časti tela',       count: 6 },
+    { id: 'hygiene', name: 'Hygiena',          count: 4 },
+    { id: 'senses',  name: 'Zmysly',           count: 3 },
+  ] },
+];
+
+// Reusable expandable tree dropdown for filter row
+function TreeDropdown({ label, value, onSelect, tree, dropRef, open, onToggle }) {
+  const [expanded, setExpanded] = React.useState({});
+  const toggle = (id) => setExpanded(e => ({ ...e, [id]: !e[id] }));
+  return (
+    <div ref={dropRef} style={{ position: 'relative' }}>
+      <button onClick={onToggle} style={{
+        display: 'inline-flex', alignItems: 'center', gap: 8,
+        padding: '10px 14px', borderRadius: 12,
+        background: value ? 'var(--alf-sky-bg)' : '#fff',
+        border: '1.5px solid ' + (value ? 'var(--alf-sky-deep)' : 'var(--alf-line)'),
+        color: 'var(--alf-ink)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+        fontFamily: 'var(--alf-font-body)',
+      }}>
+        <span style={{ color: value ? 'var(--alf-sky-deep)' : 'var(--alf-ink-mute)', fontWeight: 600 }}>{label}:</span>
+        <span>{value || 'Všetky'}</span>
+        {value && (
+          <span onClick={(e) => { e.stopPropagation(); onSelect(null); }} style={{ color: 'var(--alf-ink-mute)', fontSize: 15, lineHeight: 1, cursor: 'pointer' }}>×</span>
+        )}
+        <span style={{ color: 'var(--alf-ink-mute)', fontSize: 10 }}>{open ? '▴' : '▾'}</span>
+      </button>
+      {open && (
+        <div style={{
+          position: 'absolute', top: 'calc(100% + 6px)', left: 0, minWidth: 280,
+          background: '#fff', borderRadius: 12, zIndex: 60, padding: '6px 0',
+          boxShadow: '0 14px 36px -10px rgba(15,30,55,.25), 0 0 0 1px var(--alf-line)',
+          maxHeight: 380, overflowY: 'auto',
+        }}>
+          {tree.map(item => (
+            <React.Fragment key={item.id}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <button onClick={() => { if (item.subs) { toggle(item.id); } else { onSelect(item.name); } }} style={{
+                  flex: 1, textAlign: 'left', padding: '9px 14px', border: 'none', cursor: 'pointer',
+                  background: value === item.name ? 'var(--alf-sky-bg)' : 'transparent',
+                  color: value === item.name ? 'var(--alf-sky-ink)' : 'var(--alf-ink)',
+                  fontSize: 13, fontWeight: value === item.name ? 700 : 600,
+                  fontFamily: 'var(--alf-font-body)',
+                }}>{item.name}</button>
+                {item.subs && (
+                  <button onClick={() => toggle(item.id)} style={{
+                    padding: '9px 12px', border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--alf-ink-mute)',
+                  }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                      style={{ transition: 'transform .15s', transform: expanded[item.id] ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                      <path d="m9 6 6 6-6 6"/>
+                    </svg>
+                  </button>
+                )}
+              </div>
+              {item.subs && expanded[item.id] && (
+                <div style={{ paddingLeft: 24 }}>
+                  {item.subs.map(sub => (
+                    <button key={sub.id} onClick={() => { onSelect(sub.name); }} style={{
+                      width: '100%', textAlign: 'left', padding: '7px 14px', border: 'none', cursor: 'pointer',
+                      background: value === sub.name ? 'var(--alf-sky-bg)' : 'transparent',
+                      color: value === sub.name ? 'var(--alf-sky-ink)' : 'var(--alf-ink-soft)',
+                      fontSize: 12.5, fontWeight: value === sub.name ? 700 : 500,
+                      fontFamily: 'var(--alf-font-body)',
+                    }}>{sub.name}</button>
+                  ))}
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Theme tree panel (1B1) — full tree shown next to sidebar ──────────
 // SVP educational areas tree (per Štátny vzdelávací program for materské školy).
 const SVP_AREAS = [
@@ -854,55 +1004,7 @@ const SVP_AREAS = [
 ];
 
 function ThemeTreePanel({ selected, onSelect, header, empty = false, mode = 'temy' }) {
-  const themesTree = [
-    { id: 'animals',  name: 'Zvieratá', materials: 28, subs: SUBCATS_ANIMALS },
-    { id: 'nature',   name: 'Príroda',  materials: 22, subs: [
-      { id: 'trees',   name: 'Stromy',           count: 5 },
-      { id: 'flowers', name: 'Kvety',            count: 4 },
-      { id: 'weather', name: 'Počasie',          count: 7 },
-      { id: 'seasons', name: 'Ročné obdobia',    count: 6 },
-    ] },
-    { id: 'numbers',  name: 'Čísla',    materials: 18, subs: [
-      { id: 'count5',  name: 'Počítanie do 5',   count: 6 },
-      { id: 'count10', name: 'Počítanie do 10',  count: 5 },
-      { id: 'shapes',  name: 'Tvary',            count: 4 },
-      { id: 'compare', name: 'Porovnávanie',     count: 3 },
-    ] },
-    { id: 'colors',   name: 'Farby',    materials: 12, subs: [
-      { id: 'basic',   name: 'Základné farby',   count: 7 },
-      { id: 'mixing',  name: 'Miešanie farieb',  count: 5 },
-    ] },
-    { id: 'alphabet', name: 'Abeceda',  materials: 16, subs: [
-      { id: 'letters', name: 'Písmená',          count: 10 },
-      { id: 'words',   name: 'Prvé slová',       count: 6 },
-    ] },
-    { id: 'transport',name: 'Doprava',  materials: 14, subs: [
-      { id: 'vehicles', name: 'Vozidlá',         count: 6 },
-      { id: 'traffic',  name: 'Pravidlá cestnej premávky', count: 5 },
-      { id: 'signs',    name: 'Dopravné značky', count: 3 },
-    ] },
-    { id: 'food',     name: 'Jedlo',         materials: 11, subs: [
-      { id: 'fruit',   name: 'Ovocie',           count: 4 },
-      { id: 'veggies', name: 'Zelenina',         count: 4 },
-      { id: 'meals',   name: 'Jedlá',            count: 3 },
-    ] },
-    { id: 'family',   name: 'Rodina',        materials: 9, subs: [
-      { id: 'parents', name: 'Rodičia',          count: 3 },
-      { id: 'siblings',name: 'Súrodenci',        count: 3 },
-      { id: 'grand',   name: 'Starí rodičia',    count: 3 },
-    ] },
-    { id: 'music',    name: 'Hudba',         materials: 8, subs: [
-      { id: 'instr',   name: 'Nástroje',         count: 4 },
-      { id: 'rhythm',  name: 'Rytmus',           count: 2 },
-      { id: 'songs',   name: 'Piesne',           count: 2 },
-    ] },
-    { id: 'body',     name: 'Telo a zdravie',materials: 13, subs: [
-      { id: 'parts',   name: 'Časti tela',       count: 6 },
-      { id: 'hygiene', name: 'Hygiena',          count: 4 },
-      { id: 'senses',  name: 'Zmysly',           count: 3 },
-    ] },
-  ];
-
+  const themesTree = THEMES_TREE;
   const tree = mode === 'svp' ? SVP_AREAS : themesTree;
   const [open, setOpen] = React.useState(() => new Set([mode === 'svp' ? 'jazyk' : 'animals']));
   React.useEffect(() => {
@@ -998,14 +1100,71 @@ function ThemeTreePanel({ selected, onSelect, header, empty = false, mode = 'tem
 
 // ─── Type tree panel (1B4) — flat, first-level material types only ──────
 const MATERIAL_TYPES = [
-  { id: 'testy',         name: 'Cvičenia',      count: 58, bg: 'var(--alf-mint-bg)',   fg: '#1E7A5E' },
-  { id: 'pesničky',      name: 'Pesničky',      count: 32, bg: 'var(--alf-grape-bg)',  fg: '#5B47D6' },
-  { id: 'videá',         name: 'Videá',         count: 28, bg: 'var(--alf-coral-bg)',  fg: '#A94545' },
-  { id: 'maľovanky',     name: 'Maľovanky',     count: 21, bg: 'var(--alf-sun-bg)',    fg: '#8C6500' },
-  { id: 'grafomotorika', name: 'Grafomotorika', count: 12, bg: 'var(--alf-orange-bg)', fg: '#A65A33' },
+  { id: 'testy',         name: 'Cvičenia',      count: 58, bg: 'var(--alf-mint-bg)',   fg: '#1E7A5E', subs: null },
+  { id: 'pesničky',      name: 'Pesničky',      count: 32, bg: 'var(--alf-grape-bg)',  fg: '#5B47D6', subs: null },
+  { id: 'maľovanky',     name: 'Maľovanky',     count: 21, bg: 'var(--alf-sun-bg)',    fg: '#8C6500', subs: ['Interaktívne', 'PDF súbory'] },
+  { id: 'grafomotorika', name: 'Grafomotorika', count: 12, bg: 'var(--alf-orange-bg)', fg: '#A65A33', subs: ['Interaktívne', 'PDF súbory'] },
+  { id: 'spoj-dvojice',  name: 'Spoj dvojice',  count: 9,  bg: 'var(--alf-coral-bg)',  fg: '#A94545', subs: ['Interaktívne', 'PDF súbory'] },
+  { id: 'bludiská',      name: 'Bludiská',      count: 7,  bg: 'var(--alf-sky-bg)',    fg: '#1A5FA0', subs: ['Interaktívne', 'PDF súbory'] },
 ];
 
+const ROZPRAVKY_ITEMS = [
+  { id: 'repa',       name: 'O Repe' },
+  { id: 'prasiatka',  name: 'O troch prasiatkach' },
+  { id: 'vlk',        name: 'Vlk a sedem kozliátok' },
+  { id: 'kocur',      name: 'Kocúr v čižmách' },
+  { id: 'zlatovl',    name: 'Zlatovláska' },
+  { id: 'alfik',      name: 'O Alfíkovi' },
+  { id: 'capocka',    name: 'O Červenej čiapocčke' },
+  { id: 'medovnik',   name: 'O medovníkovom domčeku' },
+];
+const CUDZIE_JAZYKY_ITEMS = [
+  { id: 'en', name: 'Anglický jazyk' },
+  { id: 'de', name: 'Nemecký jazyk' },
+  { id: 'hu', name: 'Maďarský jazyk' },
+  { id: 'uk', name: 'Ukrajinskj jazyk' },
+];
+
+function SimpleListPanel({ title, items, selected, onSelect }) {
+  return (
+    <aside style={{
+      width: 280, flexShrink: 0,
+      background: '#fff', borderRight: '1px solid var(--alf-line)',
+      display: 'flex', flexDirection: 'column', overflow: 'hidden',
+    }}>
+      <div style={{ padding: '20px 20px 12px', borderBottom: '1px solid var(--alf-line)' }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--alf-ink-mute)', letterSpacing: '.1em', textTransform: 'uppercase' }}>{title}</div>
+      </div>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 8px 16px' }}>
+        <button onClick={() => onSelect?.(null)} style={{
+          width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
+          padding: '9px 12px', borderRadius: 10,
+          background: !selected ? 'var(--alf-sky-bg)' : 'transparent',
+          border: 'none', cursor: 'pointer',
+          fontSize: 13.5, fontWeight: !selected ? 700 : 600,
+          color: !selected ? 'var(--alf-sky-ink)' : 'var(--alf-ink-soft)',
+        }}>Všetky</button>
+        {items.map(item => {
+          const isActive = selected === item.id;
+          return (
+            <button key={item.id} onClick={() => onSelect?.(item.id)} style={{
+              width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
+              padding: '9px 12px', borderRadius: 10,
+              background: isActive ? 'var(--alf-sky-bg)' : 'transparent',
+              boxShadow: isActive ? 'inset 2px 0 0 var(--alf-sky-deep)' : 'none',
+              border: 'none', cursor: 'pointer',
+              fontSize: 13.5, fontWeight: isActive ? 700 : 600,
+              color: isActive ? 'var(--alf-ink)' : 'var(--alf-ink-soft)',
+            }}>{item.name}</button>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
+
 function TypeTreePanel({ selected, onSelect }) {
+  const [expanded, setExpanded] = React.useState({});
   return (
     <aside style={{
       width: 280, flexShrink: 0,
@@ -1018,24 +1177,49 @@ function TypeTreePanel({ selected, onSelect }) {
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px 8px 16px' }}>
         {MATERIAL_TYPES.map((t) => {
           const isActive = t.id === selected;
+          const isOpen = expanded[t.id];
           return (
-            <button key={t.id} onClick={() => onSelect?.(t.id)} style={{
-              width: '100%', textAlign: 'left',
-              display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px',
-              borderRadius: 10, background: isActive ? 'var(--alf-sky-bg)' : 'transparent',
-              boxShadow: isActive ? 'inset 2px 0 0 var(--alf-sky-deep)' : 'none',
-              border: 'none', cursor: 'pointer',
-              fontSize: 13.5, fontWeight: isActive ? 700 : 600,
-              color: isActive ? 'var(--alf-ink)' : 'var(--alf-ink-soft)',
-            }}>
-              <span style={{
-                width: 26, height: 26, borderRadius: 8, flexShrink: 0,
-                background: t.bg, color: t.fg,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}><TagGlyph kind={t.id} size={15} /></span>
-              <span style={{ flex: 1 }}>{t.name}</span>
-              <span style={{ fontSize: 11, color: 'var(--alf-ink-mute)', fontWeight: 600 }}>{t.count}</span>
-            </button>
+            <React.Fragment key={t.id}>
+              <button onClick={() => {
+                onSelect?.(t.id);
+                if (t.subs) setExpanded(e => ({ ...e, [t.id]: !e[t.id] }));
+              }} style={{
+                width: '100%', textAlign: 'left',
+                display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px',
+                borderRadius: 10, background: isActive ? 'var(--alf-sky-bg)' : 'transparent',
+                boxShadow: isActive ? 'inset 2px 0 0 var(--alf-sky-deep)' : 'none',
+                border: 'none', cursor: 'pointer',
+                fontSize: 13.5, fontWeight: isActive ? 700 : 600,
+                color: isActive ? 'var(--alf-ink)' : 'var(--alf-ink-soft)',
+              }}>
+                <span style={{
+                  width: 26, height: 26, borderRadius: 8, flexShrink: 0,
+                  background: t.bg, color: t.fg,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}><TagGlyph kind={t.id} size={15} /></span>
+                <span style={{ flex: 1 }}>{t.name}</span>
+                <span style={{ fontSize: 11, color: 'var(--alf-ink-mute)', fontWeight: 600 }}>{t.count}</span>
+                {t.subs && (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ transition: 'transform .15s', transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)', opacity: .5 }}>
+                    <path d="m9 6 6 6-6 6"/>
+                  </svg>
+                )}
+              </button>
+              {t.subs && isOpen && (
+                <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 4 }}>
+                  {t.subs.map((sub) => (
+                    <button key={sub} onClick={() => onSelect?.(t.id + ':' + sub)} style={{
+                      width: '100%', textAlign: 'left',
+                      padding: '7px 12px', borderRadius: 8,
+                      border: 'none', cursor: 'pointer', background: 'transparent',
+                      fontSize: 12.5, fontWeight: 600,
+                      color: 'var(--alf-ink-soft)',
+                    }}>{sub}</button>
+                  ))}
+                </div>
+              )}
+            </React.Fragment>
           );
         })}
       </div>
@@ -1043,9 +1227,60 @@ function TypeTreePanel({ selected, onSelect }) {
   );
 }
 
+// ─── Tag filter bar with anchored sub-filter ────────────────────────────
+function TagFilterBar({ tags, tag, setTag, subFilter, setSubFilter }) {
+  const barRef = React.useRef(null);
+  const [subLeft, setSubLeft] = React.useState(0);
+  const HAS_SUB = ['maľovanky','grafomotorika','spoj-dvojice','bludiská'];
+  const showSub = HAS_SUB.includes(tag);
+
+  const handleTag = (id, el) => {
+    setTag(id);
+    setSubFilter('all');
+    if (el && barRef.current) {
+      const barRect = barRef.current.getBoundingClientRect();
+      const btnRect = el.getBoundingClientRect();
+      setSubLeft(btnRect.left - barRect.left + btnRect.width / 2);
+    }
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div ref={barRef} style={{ display: 'flex', gap: 6, padding: 4, background: '#fff', borderRadius: 99, border: '1px solid var(--alf-line)', alignSelf: 'flex-start' }}>
+        {tags.map((t) => (
+          <button key={t.id} onClick={(e) => handleTag(t.id, e.currentTarget)} style={{
+            padding: '6px 16px', borderRadius: 99, border: 'none',
+            background: tag === t.id ? 'var(--alf-sky-bg)' : 'transparent',
+            color: tag === t.id ? 'var(--alf-sky-ink)' : 'var(--alf-ink-soft)',
+            fontWeight: 700, fontSize: 13, cursor: 'pointer',
+          }}>{t.label}</button>
+        ))}
+      </div>
+      {showSub && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: Math.max(0, subLeft - 88), transition: 'margin-left .2s ease' }}>
+          {['all','Interaktívne','PDF súbory'].map((s) => {
+            const active = subFilter === s;
+            return (
+              <button key={s} onClick={() => setSubFilter(s)} style={{
+                padding: '5px 14px', borderRadius: 99,
+                border: `1.5px solid ${active ? 'var(--alf-sky-deep)' : 'var(--alf-line)'}`,
+                background: active ? 'var(--alf-sky-bg)' : '#fff',
+                color: active ? 'var(--alf-sky-ink)' : 'var(--alf-ink-soft)',
+                fontWeight: active ? 700 : 500, fontSize: 12.5, cursor: 'pointer',
+                transition: 'all .12s',
+              }}>{s === 'all' ? 'Všetky' : s}</button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── 1C · Materials data list ───────────────────────────────────────────
 function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
   const [tag, setTag] = React.useState('all');
+  const [subFilter, setSubFilter] = React.useState('all');
   const [selectedType, setSelectedType] = React.useState('testy');
   const [selectedSub, setSelectedSub] = React.useState(view === 'svp' ? null : 'farm');
   const [catOpen, setCatOpen] = React.useState(true); // shown open by default
@@ -1054,6 +1289,24 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
   const [tagSearch, setTagSearch] = React.useState('');
   const [scope, setScope] = React.useState(view);   // 'temy' | 'svp'
   const [matModalOpen, setMatModalOpen] = React.useState(false);
+  const [createExOpen, setCreateExOpen] = React.useState(false);
+  const [svpFilter, setSvpFilter]   = React.useState(null);
+  const [temaFilter, setTemaFilter]  = React.useState(null);
+  const [svpOpen, setSvpOpen]        = React.useState(false);
+  const [temaOpen, setTemaOpen]      = React.useState(false);
+  const svpRef  = React.useRef(null);
+  const temaRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!svpOpen && !temaOpen) return;
+    const h = (e) => {
+      if (svpRef.current  && !svpRef.current.contains(e.target))  setSvpOpen(false);
+      if (temaRef.current && !temaRef.current.contains(e.target)) setTemaOpen(false);
+    };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, [svpOpen, temaOpen]);
+  const SVP_ITEMS  = SVP_TREE.map(t => t.name);
+  const TEMA_ITEMS = ['Zvieratá','Príroda','Čísla','Farby','Abeceda','Doprava','Jedlo','Rodina','Hudba','Telo a zdravie'];
   const tagsRef = React.useRef(null);
   React.useEffect(() => {
     if (!tagsOpen) return;
@@ -1068,6 +1321,8 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
     { id: 'videá',         label: 'Videá' },
     { id: 'maľovanky',     label: 'Maľovanky' },
     { id: 'grafomotorika', label: 'Grafomotorika' },
+    { id: 'spoj-dvojice',  label: 'Spoj dvojice' },
+    { id: 'bludiská',      label: 'Bludiská' },
   ];
   const filtered = MATERIALS.filter(m => {
     if (tag !== 'all' && !m.tags.includes(tag)) return false;
@@ -1101,19 +1356,56 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
       <TeacherSidebar active="materials" materialsSub={view} />
       {(view === 'temy' || view === 'svp') && <ThemeTreePanel selected={selectedSub} onSelect={setSelectedSub} mode={view} />}
       {view === 'typy' && <TypeTreePanel selected={selectedType} onSelect={setSelectedType} />}
+      {view === 'rozpravky' && <SimpleListPanel title="Rozprávky" items={ROZPRAVKY_ITEMS} selected={selectedSub} onSelect={setSelectedSub} />}
+      {view === 'cudzie-jazyky' && <SimpleListPanel title="Cudzie jazyky" items={CUDZIE_JAZYKY_ITEMS} selected={selectedSub} onSelect={setSelectedSub} />}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <TeacherTopBar
-          title={view === 'mine' ? 'Moje materiály' : view === 'svp' ? 'Knižnica · ŠVP' : view === 'typy' ? 'Knižnica · Typy' : 'Knižnica'}
+          title={view === 'mine' ? 'Moje materiály' : view === 'svp' ? 'Knižnica · ŠVP' : view === 'typy' ? 'Knižnica · Typy' : view === 'rozpravky' ? 'Knižnica · Rozprávky' : view === 'cudzie-jazyky' ? 'Knižnica · Cudzie jazyky' : 'Knižnica'}
           hideAge
           search={false}
         >
-          {view === 'mine' && <button onClick={() => setMatModalOpen(true)} className="alf-btn is-active">+ Nový materiál</button>}
+          {view === 'mine' && <>
+            <button onClick={() => setCreateExOpen(true)} className="alf-btn" style={{ background: '#FFF3E0', borderColor: '#E07B2A', color: '#E07B2A', fontWeight: 800 }}>+ Vytvoriť cvičenie</button>
+            <button onClick={() => setMatModalOpen(true)} className="alf-btn is-active">+ Nahrať materiál</button>
+          </>}
         </TeacherTopBar>
 
         <div style={{ flex: 1, padding: '20px 36px 28px', overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* filters strip — typ materiálu na prvom riadku */}
+          {view !== 'typy' && (
+            <TagFilterBar tags={tags} tag={tag} setTag={setTag} subFilter={subFilter} setSubFilter={setSubFilter} />
+          )}
+
+
           {/* filters strip — Vek · Zručnosti filter · Hľadať */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', position: 'relative', zIndex: 10 }}>
             <AgeFilterPill value={age} onChange={onAgeChange} />
+
+            {/* ŠVP dropdown — len pre Typy */}
+            {view === 'typy' && (
+              <TreeDropdown
+                label="ŠVP"
+                value={svpFilter}
+                onSelect={(v) => { setSvpFilter(v); setSvpOpen(false); }}
+                tree={SVP_AREAS}
+                dropRef={svpRef}
+                open={svpOpen}
+                onToggle={() => { setSvpOpen(o => !o); setTemaOpen(false); }}
+              />
+            )}
+
+            {/* Témy dropdown — len pre Typy */}
+            {view === 'typy' && (
+              <TreeDropdown
+                label="Téma"
+                value={temaFilter}
+                onSelect={(v) => { setTemaFilter(v); setTemaOpen(false); }}
+                tree={THEMES_TREE}
+                dropRef={temaRef}
+                open={temaOpen}
+                onToggle={() => { setTemaOpen(o => !o); setSvpOpen(false); }}
+              />
+            )}
 
             {/* Zručnosti multi-select dropdown */}
             <div ref={tagsRef} style={{ position: 'relative' }}>
@@ -1234,29 +1526,11 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
               )}
             </div>
 
-            <span style={{ flex: 1 }} />
-
             <div className="alf-search" style={{ width: 260 }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input placeholder="Hľadať..." />
             </div>
           </div>
-
-          {/* Second filter row — material kind chips (skrytý v zobrazení Typy — filter je v strome) */}
-          {view !== 'typy' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', gap: 6, padding: 4, background: '#fff', borderRadius: 99, border: '1px solid var(--alf-line)' }} data-row="tags-bottom">
-              {tags.map((t) => (
-                <button key={t.id} onClick={() => setTag(t.id)} style={{
-                  padding: '6px 16px', borderRadius: 99, border: 'none',
-                  background: tag === t.id ? 'var(--alf-sky-bg)' : 'transparent',
-                  color: tag === t.id ? 'var(--alf-sky-ink)' : 'var(--alf-ink-soft)',
-                  fontWeight: 700, fontSize: 13, cursor: 'pointer',
-                }}>{t.label}</button>
-              ))}
-            </div>
-          </div>
-          )}
 
           {/* table — columns: Vek · Play · Názov · Zručnosti · Actions */}
           <MaterialsTable filtered={filtered} showActions={view === 'mine'} pathLabel={view === 'svp' || view === 'typy' ? 'ŠVP' : 'TÉMA'} extraPath={view === 'mine' ? 'ŠVP' : null} />
@@ -1274,6 +1548,7 @@ function Teacher_1C_Materials({ age = 'all', onAgeChange, view = 'svp' }) {
         </div>
       </main>
       <NewMaterialModal open={matModalOpen} onClose={() => setMatModalOpen(false)} />
+      <CreateExerciseModal open={createExOpen} onClose={() => setCreateExOpen(false)} />
     </div>
   );
 }
@@ -1757,5 +2032,5 @@ function FavoriteHeart({ isFav, onToggle }) {
 Object.assign(window, {
   Teacher_1A_Dashboard, Teacher_1B_Library, Teacher_1B_LibraryTree, Teacher_1C_Materials,
   CategoryDropdown, FavoriteHeart, LessonChips, CategoryPath, SvpPath,
-  ThemeTreePanel,
+  ThemeTreePanel, NewMaterialModal,
 });

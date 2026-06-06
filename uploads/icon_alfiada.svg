@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 69 69" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-5684,-3078)">
+        <g transform="matrix(1,0,0,1.59013,-0.279951,3549.28)">
+            <g transform="matrix(1,0,0,1,88.1762,0)">
+                <g transform="matrix(0.665425,0,0,0.418475,1987.83,-371.13)">
+                    <rect x="5422.83" y="178.882" width="102.19" height="102.19" style="fill:none;"></rect>
+                </g>
+                <g transform="matrix(0.182862,0,0,0.18783,5584.31,-297.821)">
+                    <g transform="matrix(5.46861,-0,-0,3.34813,64.4857,7.6704)">
+                        <use xlink:href="#_Image1" x="17.832" y="9.046" width="33px" height="51px"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <image id="_Image1" width="33px" height="51px"></image>
+    </defs>
+</svg>

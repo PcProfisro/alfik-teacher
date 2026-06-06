@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.58537;">
+    <g transform="matrix(1,0,0,1,-5329,-13103)">
+        <g transform="matrix(0.498997,0,0,0.0592082,4329.3,12787.5)">
+            <g id="ok" transform="matrix(1,0,0,1,0.511621,-25.868)">
+                <g transform="matrix(1.00495,-1.10261e-45,0,13.0078,1565.54,-113140)">
+                    <g transform="matrix(1.79244,0,0,0.444259,-3703.79,6472.26)">
+                        <g transform="matrix(1,0,0,2.62704,1203.38,-20238)">
+                            <circle cx="1125.82" cy="9983.45" r="16.867" style="fill:rgb(255,177,7);stroke:black;stroke-width:1.26px;"></circle>
+                        </g>
+                        <g transform="matrix(1.10142,0,0,3.89765,1086.1,-32897.7)">
+                            <circle cx="1122.84" cy="9973.98" r="2.185" style="fill:rgb(35,30,32);"></circle>
+                        </g>
+                        <g transform="matrix(1.10142,0,0,3.89765,1098.23,-32897.7)">
+                            <circle cx="1122.84" cy="9973.98" r="2.185" style="fill:rgb(35,30,32);"></circle>
+                        </g>
+                    </g>
+                    <g transform="matrix(0.836366,0,0,0.544569,-2524.62,4137.84)">
+                        <path d="M3566.63,9189.25L3595.82,9189.25" style="fill:none;stroke:rgb(35,30,32);stroke-width:2px;"></path>
+                    </g>
+                </g>
+                <g transform="matrix(2.08476,0,0,17.57,-8512.5,-222319)">
+                    <rect x="5044.79" y="12958.9" width="32.945" height="32.945" style="fill:none;"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

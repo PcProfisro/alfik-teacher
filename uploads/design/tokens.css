@@ -1,0 +1,94 @@
+/* Alfík — Design tokens
+ * Brand palette, fonts and visual primitives extracted from the
+ * mobile app prototype. Use as a single source of truth across
+ * all Alfík apps (web portal, mobile app, etc.).
+ */
+
+:root {
+  /* ── Brand palette ─────────────────────────────────────────── */
+  --alf-sky:        #7CC4F0;   /* light blue accent */
+  --alf-sky-deep:   #3FA9E0;   /* primary blue */
+  --alf-sky-bg:     #DBEEF9;   /* light blue surface (tiles) */
+  --alf-sky-ink:    #1F5C82;   /* navy text on light blue */
+
+  --alf-sun:        #FFC542;
+  --alf-sun-deep:   #FF9F2D;
+  --alf-sun-bg:     #FFF3D6;   /* light yellow surface (age cards) */
+
+  --alf-coral:      #FF6B6B;
+  --alf-coral-bg:   #FFE3E3;
+
+  --alf-mint:       #3DD9B0;
+  --alf-mint-deep:  #2EB892;
+  --alf-mint-bg:    #D9F8EF;
+
+  --alf-grape:      #8B7CF6;
+  --alf-grape-bg:   #E6E1FB;
+
+  --alf-orange:     #FF8A65;
+  --alf-orange-bg:  #FFE3D6;
+
+  /* Age-band brand colors (3 bands) */
+  --alf-age-3-4:    #FF8A65;
+  --alf-age-4-5:    #FFB400;
+  --alf-age-5-6:    #3DD9B0;
+
+  /* Hero (dark blue) banner */
+  --alf-hero-from:  #1E3A8A;
+  --alf-hero-to:    #0F2A4A;
+
+  /* Neutral ink */
+  --alf-ink:        #1A2B3D;
+  --alf-ink-soft:   #4A5B6E;
+  --alf-ink-mute:   #8194A8;
+
+  /* Surface */
+  --alf-bg:         #F2F7FB;
+  --alf-surface:    #FFFFFF;
+  --alf-line:       #E4EBF2;
+
+  /* Dark theme */
+  --alf-dark-bg:        #0E1622;
+  --alf-dark-surface:   #1A2433;
+  --alf-dark-line:      #2A3447;
+  --alf-dark-ink:       #F2F7FB;
+  --alf-dark-ink-soft:  #A8B6C8;
+
+  /* ── Type ─────────────────────────────────────────────────── */
+  --alf-font-display: "Fredoka", "Nunito", system-ui, sans-serif;  /* logo / headings */
+  --alf-font-body:    "Nunito", system-ui, sans-serif;             /* UI body */
+
+  --alf-fw-regular:   500;
+  --alf-fw-semibold:  600;
+  --alf-fw-bold:      700;
+  --alf-fw-extrabold: 800;
+  --alf-fw-black:     900;
+
+  /* ── Radius ────────────────────────────────────────────────── */
+  --alf-r-sm:   10px;
+  --alf-r-md:   14px;
+  --alf-r-lg:   18px;
+  --alf-r-xl:   22px;
+  --alf-r-2xl:  28px;
+  --alf-r-pill: 9999px;
+
+  /* ── Shadows ───────────────────────────────────────────────── */
+  --alf-shadow-card:    0 3px 8px -3px rgba(15, 30, 55, 0.08);
+  --alf-shadow-tile:    0 4px 10px -4px rgba(15, 30, 55, 0.08);
+  --alf-shadow-elevate: 0 10px 24px -10px rgba(15, 30, 55, 0.20);
+  --alf-shadow-popover: 0 20px 50px -10px rgba(15, 30, 55, 0.35);
+
+  /* ── Spacing scale ─────────────────────────────────────────── */
+  --alf-s-1: 4px;
+  --alf-s-2: 8px;
+  --alf-s-3: 12px;
+  --alf-s-4: 16px;
+  --alf-s-5: 20px;
+  --alf-s-6: 24px;
+  --alf-s-8: 32px;
+}
+
+/* Google Fonts import (drop into <head> of the host app) */
+/*
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+*/

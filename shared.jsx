@@ -86,7 +86,7 @@ function AgePopover({ value, onPick }) {
 const NAV_ITEMS = [
   { key: 'dashboard', label: 'Prehľad',          icon: 'dashboard' },
   { key: 'materials', label: 'Knižnica', icon: 'materials' },
-  { key: 'classes',   label: 'Moje hodiny',      icon: 'classes' },
+  { key: 'classes',   label: 'Moja príprava',    icon: 'classes' },
   { key: 'history',   label: 'História',         icon: 'history' },
 ];
 
@@ -103,17 +103,28 @@ function NavIcon({ k }) {
   }
 }
 
-const MATERIALS_SUBS = [
-  { key: 'svp',  label: 'ŠVP' },
-  { key: 'temy', label: 'Témy' },
-  { key: 'typy', label: 'Typy' },
-  { key: 'mine', label: 'Moje' },
+const CLASSES_SUBS = [
+  { key: 'hodiny',   label: 'Moje hodiny' },
+  { key: 'mine',     label: 'Moje materi\u00e1ly' },
+  { key: 'kalendar', label: 'Kalend\u00e1r' },
 ];
 
-function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName = 'Janka Usilovná' }) {
-  const [materialsOpen, setMaterialsOpen] = React.useState(active === 'materials');
-  const [collapsed, setCollapsed] = React.useState(false);
+const MATERIALS_SUBS = [
+  { key: 'svp',           label: 'ŠVP' },
+  { key: 'temy',          label: 'Témy' },
+  { key: 'typy',          label: 'Typy' },
+  { key: 'rozpravky',     label: 'Rozprávky' },
+  { key: 'cudzie-jazyky', label: 'Cudzie jazyky' },
+];
+
+function TeacherSidebar({ active: activeProp = 'dashboard', materialsSub: msProp = 'svp', classesSub: csProp = 'hodiny', teacherName = 'Janka Usilová' }) {
   const nav = React.useContext(TeacherNavCtx);
+  const active       = (nav && nav.screen)        || activeProp;
+  const materialsSub = (nav && nav.materialsSub)  || msProp;
+  const classesSub   = (nav && nav.classesSub)    || csProp;
+  const [materialsOpen, setMaterialsOpen] = React.useState(active === 'materials');
+  const [classesOpen, setClassesOpen] = React.useState(active === 'classes');
+  const [collapsed, setCollapsed] = React.useState(false);
 
   return (
     <aside style={{
@@ -143,7 +154,9 @@ function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName 
         {NAV_ITEMS.map((it) => {
           const isActive = it.key === active;
           const isMaterials = it.key === 'materials';
+          const isClasses = it.key === 'classes';
           const showSubs = !collapsed && isMaterials && (isActive || materialsOpen);
+          const showClassesSubs = !collapsed && isClasses && (isActive || classesOpen);
           return (
             <React.Fragment key={it.key}>
               <a href="#" title={collapsed ? it.label : undefined} onClick={(e) => {
@@ -151,6 +164,9 @@ function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName 
                 if (isMaterials) {
                   if (!collapsed) setMaterialsOpen(o => !o);
                   if (nav) nav.navigate('materials', materialsSub || 'svp');
+                } else if (isClasses) {
+                  if (!collapsed) setClassesOpen(o => !o);
+                  if (nav) nav.navigate('classes', classesSub || 'hodiny');
                 } else if (nav) {
                   nav.navigate(it.key);
                 }
@@ -167,10 +183,10 @@ function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName 
                 {isActive && !collapsed && <span style={{ position: 'absolute', left: -12, top: 8, bottom: 8, width: 3, background: 'var(--alf-sky-deep)', borderRadius: 2 }} />}
                 <NavIcon k={it.key} />
                 {!collapsed && <span style={{ flex: 1 }}>{it.label}</span>}
-                {isMaterials && !collapsed && (
+                {(isMaterials || isClasses) && !collapsed && (
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{
                     transition: 'transform .15s ease',
-                    transform: showSubs ? 'rotate(90deg)' : 'rotate(0deg)',
+                    transform: (isMaterials ? showSubs : showClassesSubs) ? 'rotate(90deg)' : 'rotate(0deg)',
                     opacity: .7,
                   }}><path d="m9 6 6 6-6 6"/></svg>
                 )}
@@ -190,14 +206,111 @@ function TeacherSidebar({ active = 'library', materialsSub = 'svp', teacherName 
                   })}
                 </div>
               )}
+              {showClassesSubs && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '2px 0 4px 36px' }}>
+                  {CLASSES_SUBS.map((s) => {
+                    const subActive = isActive && s.key === classesSub;
+                    return (
+                      <a key={s.key} href="#" onClick={(e) => { e.preventDefault(); if (nav) nav.navigate('classes', s.key); }} style={{
+                        padding: '8px 12px', borderRadius: 10, textDecoration: 'none',
+                        background: subActive ? 'var(--alf-sky-bg)' : 'transparent',
+                        color: subActive ? 'var(--alf-sky-ink)' : 'var(--alf-ink-mute)',
+                        fontSize: 13.5, fontWeight: subActive ? 700 : 600,
+                      }}>{s.label}</a>
+                    );
+                  })}
+                </div>
+              )}
             </React.Fragment>
           );
         })}
       </nav>
 
+      <LanguagePicker collapsed={collapsed} />
       <AppsLauncher collapsed={collapsed} />
       <ProfileFooter teacherName={teacherName} role="teacher" collapsed={collapsed} />
     </aside>
+  );
+}
+
+// ─── Language picker ────────────────────────────────────────────────────
+const LANGUAGES = [
+  { code: 'sk', label: 'Slovenčina' },
+  { code: 'cz', label: 'Čeština' },
+  { code: 'en', label: 'English' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'hu', label: 'Magyar' },
+];
+
+function FlagImg({ code, size = 22 }) {
+  return <img src={`uploads/${code}.svg`} alt={code} style={{ width: size, height: size, borderRadius: 4, display: 'block', objectFit: 'cover' }} />;
+}
+
+function LanguagePicker({ collapsed = false }) {
+  const [open, setOpen] = React.useState(false);
+  const [lang, setLang] = React.useState('sk');
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, [open]);
+  return (
+    <div ref={ref}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      style={{ position: 'relative', borderTop: '1px solid var(--alf-line)' }}>
+      <button onClick={() => setOpen(o => !o)} title={collapsed ? 'Jazyk' : undefined} style={{
+        width: '100%',
+        padding: collapsed ? '11px 0' : '11px 16px',
+        display: 'flex', alignItems: 'center', gap: collapsed ? 0 : 12,
+        justifyContent: collapsed ? 'center' : 'flex-start',
+        background: open ? 'var(--alf-bg)' : 'transparent',
+        border: 'none', cursor: 'pointer', textAlign: 'left',
+        transition: 'background .12s',
+        color: 'var(--alf-ink)',
+      }}>
+        <span style={{
+          width: 32, height: 32, borderRadius: 9,
+          background: open ? 'var(--alf-sky-bg)' : 'transparent',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}>
+          <FlagImg code={lang} size={22} />
+        </span>
+        {!collapsed && <span style={{ flex: 1, fontSize: 14, fontWeight: 600 }}>Jazyk</span>}
+        {!collapsed && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--alf-ink-mute)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m9 6 6 6-6 6"/></svg>}
+      </button>
+      {open && (
+        <div style={{
+          position: 'absolute',
+          left: 'calc(100% + 8px)',
+          bottom: 0,
+          width: 180,
+          background: '#fff',
+          borderRadius: 12,
+          boxShadow: '0 14px 36px -10px rgba(15,30,55,.25), 0 0 0 1px var(--alf-line)',
+          zIndex: 70,
+          overflow: 'hidden',
+          padding: 6,
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--alf-ink-mute)', letterSpacing: '.08em', textTransform: 'uppercase', padding: '4px 6px 8px' }}>Jazyk</div>
+          {LANGUAGES.map((l) => (
+            <button key={l.code} onClick={() => { setLang(l.code); setOpen(false); }} style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+              padding: '8px 10px', borderRadius: 8, border: 'none', cursor: 'pointer', textAlign: 'left',
+              background: lang === l.code ? 'var(--alf-sky-bg)' : 'transparent',
+              color: lang === l.code ? 'var(--alf-sky-ink)' : 'var(--alf-ink)',
+              fontWeight: lang === l.code ? 700 : 500, fontSize: 13.5,
+            }}>
+              <FlagImg code={l.code} size={20} />
+              {l.label}
+              {lang === l.code && <svg style={{ marginLeft: 'auto' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7"/></svg>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

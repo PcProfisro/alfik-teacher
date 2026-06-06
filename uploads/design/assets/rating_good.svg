@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 35 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.58537;">
+    <g transform="matrix(1,0,0,1,-5367,-13103)">
+        <g transform="matrix(0.498997,0,0,0.0592082,4329.3,12787.5)">
+            <g id="good" transform="matrix(1,0,0,1,0.511621,-25.868)">
+                <g transform="matrix(2.08476,0,0,17.57,-8438.05,-222319)">
+                    <rect x="5044.79" y="12958.9" width="32.945" height="32.945" style="fill:none;"></rect>
+                </g>
+                <g transform="matrix(1.80132,-2.21881e-45,0,5.77883,-2082.14,-28949.7)">
+                    <g transform="matrix(1,0,0,2.62704,1203.38,-20238)">
+                        <circle cx="1125.82" cy="9983.45" r="16.867" style="fill:rgb(255,225,51);stroke:black;stroke-width:1.27px;"></circle>
+                    </g>
+                    <g transform="matrix(0.632569,0,0,1.66178,1617.04,-10603.5)">
+                        <path d="M1112.41,9993.7C1112.6,9993.78 1112.83,9993.72 1113.02,9993.81C1113.38,9993.96 1117.84,9999.68 1127.85,9998.73C1134.9,9998.07 1138.63,9993.65 1138.72,9993.61C1138.91,9993.53 1139.15,9993.62 1139.34,9993.54C1139.3,9993.76 1139.42,9993.99 1139.38,9994.22C1139.33,9994.46 1135.19,10000.9 1127.44,10001.7C1118.01,10002.7 1112.48,9994.75 1112.39,9994.32C1112.34,9994.12 1112.45,9993.9 1112.41,9993.7Z" style="fill:rgb(35,30,32);"></path>
+                    </g>
+                    <g transform="matrix(1,0,0,1,0.0334047,0.488545)">
+                        <g transform="matrix(1.10142,0,0,3.89765,1086.38,-32898.2)">
+                            <circle cx="1122.84" cy="9973.98" r="2.185" style="fill:rgb(35,30,32);"></circle>
+                        </g>
+                        <g transform="matrix(1.10142,0,0,3.89765,1098.51,-32898.2)">
+                            <circle cx="1122.84" cy="9973.98" r="2.185" style="fill:rgb(35,30,32);"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

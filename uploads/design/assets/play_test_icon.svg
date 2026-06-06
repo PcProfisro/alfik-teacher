@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<svg width="100%" height="100%" viewBox="0 0 41 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.58537;">
+    <g transform="matrix(1,0,0,1,-5244,-13155)">
+        <g transform="matrix(0.498997,0,0,0.0592082,4329.3,12787.5)">
+            <g id="play_test_icon" transform="matrix(1,0,0,1,-147.996,-14.7963)">
+                <g transform="matrix(1.41552,-1.1094e-45,0,12.0305,-13050.3,-26495.3)">
+                    <g transform="matrix(1.49346,0,0,1.49346,7411.86,602.741)">
+                        <circle cx="2166.67" cy="1436.2" r="16.483" style="fill:none;stroke:rgb(118,168,0);stroke-width:2.79px;"></circle>
+                    </g>
+                    <g transform="matrix(6.12323e-17,1,-1,6.12323e-17,13397,-7470.69)">
+                        <path d="M10218.3,2737.31L10232.2,2755.87L10204.4,2755.87L10218.3,2737.31Z" style="fill:rgb(118,168,0);stroke:rgb(118,168,0);stroke-width:5.08px;"></path>
+                    </g>
+                </g>
+                <g transform="matrix(1.97883,0,0,16.6773,-8251.41,-209938)">
+                    <rect x="5171.25" y="12961.4" width="40.509" height="40.509" style="fill:none;"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

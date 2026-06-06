@@ -63,13 +63,117 @@ function TextTag({ children, tone = 'neutral' }) {
   );
 }
 
+// ─── Create Exercise fullscreen modal ──────────────────────────────────────
+const EXERCISE_TYPES = [
+  { id: 'vob-text',   label: 'Výber odpovede\n(text)',      icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="8" y="8" width="40" height="6" rx="2" fill="#c8d8e8"/><rect x="8" y="18" width="28" height="6" rx="2" fill="#c8d8e8"/><rect x="8" y="30" width="36" height="6" rx="2" fill="#c8d8e8"/><rect x="8" y="40" width="22" height="6" rx="2" fill="#c8d8e8"/><rect x="52" y="8" width="22" height="36" rx="4" fill="#c8d8e8"/><rect x="55" y="14" width="16" height="14" rx="2" fill="#b0c4d8"/></svg> },
+  { id: 'vob-img',    label: 'Výber odpovede\n(obrázky)',   icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="10" y="8" width="60" height="20" rx="3" fill="#c8d8e8"/><rect x="14" y="11" width="16" height="14" rx="2" fill="#b0c4d8"/><rect x="10" y="32" width="18" height="18" rx="3" fill="#c8d8e8"/><rect x="31" y="32" width="18" height="18" rx="3" fill="#c8d8e8"/><rect x="52" y="32" width="18" height="18" rx="3" fill="#c8d8e8"/></svg> },
+  { id: 'pexeso',     label: 'Pexeso',                      icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="8" y="8" width="16" height="16" rx="2" fill="#b0c4d8"/><rect x="27" y="8" width="16" height="16" rx="2" fill="#c8d8e8"/><rect x="46" y="8" width="16" height="16" rx="2" fill="#b0c4d8"/><rect x="8" y="28" width="16" height="16" rx="2" fill="#c8d8e8"/><rect x="27" y="28" width="16" height="16" rx="2" fill="#b0c4d8"/><rect x="46" y="28" width="16" height="16" rx="2" fill="#c8d8e8"/></svg> },
+  { id: 'skupiny',    label: 'Skupiny',                     icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="6" width="30" height="46" rx="4" fill="#c8d8e8"/><rect x="44" y="6" width="30" height="46" rx="4" fill="#c8d8e8"/><rect x="10" y="14" width="22" height="6" rx="2" fill="#b0c4d8"/><rect x="48" y="14" width="22" height="6" rx="2" fill="#b0c4d8"/><rect x="10" y="24" width="22" height="6" rx="2" fill="#b0c4d8"/><rect x="48" y="24" width="22" height="6" rx="2" fill="#b0c4d8"/></svg> },
+  { id: 'prir-text',  label: 'Priradenie (text)',            icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="8" width="28" height="8" rx="2" fill="#c8d8e8"/><rect x="6" y="20" width="28" height="8" rx="2" fill="#c8d8e8"/><rect x="6" y="32" width="28" height="8" rx="2" fill="#c8d8e8"/><rect x="46" y="8" width="28" height="8" rx="2" fill="#c8d8e8"/><rect x="46" y="20" width="28" height="8" rx="2" fill="#c8d8e8"/><rect x="46" y="32" width="28" height="8" rx="2" fill="#c8d8e8"/><line x1="34" y1="12" x2="46" y2="24" stroke="#b0c4d8" strokeWidth="2"/><line x1="34" y1="24" x2="46" y2="12" stroke="#b0c4d8" strokeWidth="2"/></svg> },
+  { id: 'prir-img',   label: 'Priradenie (obrázky)',        icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="16" width="18" height="14" rx="2" fill="#c8d8e8"/><rect x="27" y="16" width="18" height="14" rx="2" fill="#c8d8e8"/><rect x="48" y="16" width="18" height="14" rx="2" fill="#c8d8e8"/><rect x="6" y="36" width="18" height="10" rx="2" fill="#b0c4d8"/><rect x="27" y="36" width="18" height="10" rx="2" fill="#b0c4d8"/><rect x="48" y="36" width="18" height="10" rx="2" fill="#b0c4d8"/></svg> },
+  { id: 'zor-zv',     label: 'Zoradenie (zvislo)',          icon: <svg viewBox="0 0 80 60" width="72" height="54"><text x="16" y="18" fontSize="10" fill="#b0c4d8" fontWeight="700">1</text><rect x="24" y="10" width="42" height="8" rx="2" fill="#c8d8e8"/><text x="16" y="32" fontSize="10" fill="#b0c4d8" fontWeight="700">2</text><rect x="24" y="24" width="42" height="8" rx="2" fill="#c8d8e8"/><text x="16" y="46" fontSize="10" fill="#b0c4d8" fontWeight="700">3</text><rect x="24" y="38" width="42" height="8" rx="2" fill="#c8d8e8"/></svg> },
+  { id: 'zor-vod',    label: 'Zoradenie\n(vodorovne)',      icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="20" width="14" height="18" rx="2" fill="#b0c4d8"/><text x="9" y="32" fontSize="9" fill="#fff" fontWeight="700">1</text><rect x="23" y="20" width="14" height="18" rx="2" fill="#c8d8e8"/><text x="26" y="32" fontSize="9" fill="#b0c4d8" fontWeight="700">4</text><rect x="40" y="20" width="14" height="18" rx="2" fill="#c8d8e8"/><text x="43" y="32" fontSize="9" fill="#b0c4d8" fontWeight="700">3</text><rect x="57" y="20" width="14" height="18" rx="2" fill="#c8d8e8"/><text x="60" y="32" fontSize="9" fill="#b0c4d8" fontWeight="700">2</text></svg> },
+  { id: 'popis-obr',  label: 'Popis obrázka',               icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="8" width="34" height="44" rx="3" fill="#c8d8e8"/><rect x="10" y="14" width="26" height="20" rx="2" fill="#b0c4d8"/><rect x="10" y="38" width="20" height="5" rx="2" fill="#b0c4d8"/><rect x="44" y="8" width="30" height="8" rx="2" fill="#c8d8e8"/><rect x="44" y="20" width="30" height="8" rx="2" fill="#c8d8e8"/><rect x="44" y="32" width="30" height="8" rx="2" fill="#c8d8e8"/><rect x="44" y="44" width="20" height="8" rx="2" fill="#c8d8e8"/></svg> },
+  { id: 'dvojice',    label: 'Dvojice',                     icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="10" width="26" height="38" rx="3" fill="#c8d8e8"/><rect x="26" y="22" width="28" height="14" rx="2" fill="#c8d8e8"/><rect x="48" y="10" width="26" height="38" rx="3" fill="#c8d8e8"/><line x1="32" y1="29" x2="48" y2="29" stroke="#b0c4d8" strokeWidth="2"/></svg> },
+  { id: 'puzzle',     label: 'Puzzle',                      icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="10" y="10" width="24" height="18" rx="2" fill="#c8d8e8"/><path d="M34 18 Q40 14 40 18 Q40 22 34 22Z" fill="#c8d8e8"/><rect x="10" y="32" width="24" height="18" rx="2" fill="#b0c4d8"/><path d="M22 32 Q18 26 22 26 Q26 26 22 32Z" fill="#b0c4d8"/><rect x="40" y="10" width="24" height="18" rx="2" fill="#b0c4d8"/><rect x="40" y="32" width="24" height="18" rx="2" fill="#c8d8e8"/><path d="M52 32 Q48 26 52 26 Q56 26 52 32Z" fill="#c8d8e8"/></svg> },
+  { id: 'hadaj',      label: 'Hádaj slovo',                 icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="10" y="8" width="24" height="18" rx="2" fill="#c8d8e8"/><rect x="14" y="12" width="16" height="10" rx="1" fill="#b0c4d8"/><rect x="6" y="30" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="18" y="30" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="30" y="30" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="42" y="30" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="54" y="30" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="6" y="44" width="10" height="10" rx="2" fill="#b0c4d8"/><rect x="18" y="44" width="10" height="10" rx="2" fill="#c8d8e8"/></svg> },
+  { id: 'tajnicka',   label: 'Tajnička',                    icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="14" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="18" y="14" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="30" y="14" width="10" height="10" rx="2" fill="#4caf50" opacity=".6"/><rect x="42" y="14" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="54" y="14" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="6" y="28" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="18" y="28" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="30" y="28" width="10" height="10" rx="2" fill="#4caf50" opacity=".6"/><rect x="42" y="28" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="54" y="28" width="10" height="10" rx="2" fill="#c8d8e8"/><rect x="30" y="42" width="10" height="10" rx="2" fill="#4caf50" opacity=".6"/></svg> },
+  { id: 'dopln',      label: 'Doplň slová',                 icon: <svg viewBox="0 0 80 60" width="72" height="54"><rect x="6" y="10" width="68" height="8" rx="2" fill="#c8d8e8"/><rect x="6" y="24" width="28" height="8" rx="2" fill="#c8d8e8"/><rect x="38" y="24" width="36" height="8" rx="2" fill="#b0c4d8" opacity=".5"/><line x1="38" y1="32" x2="74" y2="32" stroke="#b0c4d8" strokeWidth="1.5"/><rect x="6" y="38" width="42" height="8" rx="2" fill="#c8d8e8"/></svg> },
+];
+
+function CreateExerciseModal({ open, onClose }) {
+  const [search, setSearch] = React.useState('');
+  const [selected, setSelected] = React.useState('vob-text');
+  const [testName, setTestName] = React.useState('Názov testu');
+
+  const filtered = EXERCISE_TYPES.filter(t =>
+    t.label.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (!open) return null;
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      background: '#fff', display: 'flex', flexDirection: 'column',
+    }}>
+      {/* Top bar */}
+      <div style={{
+        height: 64, borderBottom: '1px solid #e0e6ef',
+        display: 'flex', alignItems: 'center', gap: 16, padding: '0 24px',
+        background: '#fff', flexShrink: 0,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 220 }}>
+          <img src="uploads/logo-edu-alf.svg" alt="Alfík" style={{ height: 36 }} />
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#1a2a3a', lineHeight: 1.2 }}>{testName}</div>
+            <div style={{ fontSize: 11, color: '#8a9bb0', fontWeight: 500 }}>rozpracované</div>
+          </div>
+        </div>
+
+        <span style={{ flex: 1 }} />
+
+        <button style={{ display: 'flex', alignItems: 'center', gap: 6, border: 'none', background: 'transparent', cursor: 'pointer', color: '#3a5070', fontWeight: 600, fontSize: 14 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 3 12a10 10 0 0 0 16.07 7.07"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg>
+          Vlastnosti
+        </button>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 6, border: 'none', background: 'transparent', cursor: 'pointer', color: '#3a5070', fontWeight: 600, fontSize: 14 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Náhľad
+        </button>
+        <button style={{ background: '#5cb85c', color: '#fff', border: 'none', borderRadius: 10, padding: '9px 22px', fontWeight: 800, fontSize: 14, cursor: 'pointer' }}>
+          Uložiť
+        </button>
+        <button onClick={onClose} style={{ marginLeft: 8, background: 'transparent', border: 'none', cursor: 'pointer', color: '#8a9bb0', padding: 6, borderRadius: 8, display: 'flex', alignItems: 'center' }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, background: '#dde6f0', overflow: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 24px 60px' }}>
+        <h2 style={{ fontSize: 28, fontWeight: 800, color: '#1a2a3a', margin: '0 0 28px', textAlign: 'center' }}>
+          Pridajte prvú úlohu...
+        </h2>
+
+        {/* Search */}
+        <div style={{ width: '100%', maxWidth: 680, background: '#fff', borderRadius: 12, border: '1.5px solid #d0dae8', display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', marginBottom: 28 }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a9bb0" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Vyhľadať typ úlohy..." style={{ border: 'none', outline: 'none', fontSize: 15, color: '#1a2a3a', background: 'transparent', flex: 1 }} />
+        </div>
+
+        {/* Grid */}
+        <div style={{ width: '100%', maxWidth: 680, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+          {filtered.map(t => (
+            <button key={t.id} onClick={() => setSelected(t.id)} style={{
+              background: '#fff',
+              border: `2px solid ${selected === t.id ? '#4caf50' : '#d0dae8'}`,
+              borderRadius: 12,
+              padding: '16px 8px 12px',
+              cursor: 'pointer',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+              transition: 'border-color .12s, box-shadow .12s',
+              boxShadow: selected === t.id ? '0 0 0 3px rgba(76,175,80,.12)' : 'none',
+            }}>
+              {t.icon}
+              <span style={{
+                fontSize: 12, fontWeight: 600, color: '#3a5070', textAlign: 'center', lineHeight: 1.35,
+                whiteSpace: 'pre-line',
+              }}>{t.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Test row used inside an expanded lesson — Play · Názov · Tagy · Zmazať.
-function TestRow({ m, onDelete }) {
+function TestRow({ m, onDelete, onEdit }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: '80px 1fr 50px',
-      gap: 16, padding: '12px 22px 12px 64px',
+      gridTemplateColumns: '80px 1fr auto',
+      gap: 10, padding: '7px 22px 7px 56px',
       alignItems: 'center',
       borderBottom: '1px solid var(--alf-line)',
       background: 'rgba(219, 238, 249, .25)',
@@ -80,29 +184,33 @@ function TestRow({ m, onDelete }) {
       <PlayButton material={m} size={56} />
       <div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--alf-ink)', lineHeight: 1.25 }}>{m.name}</div>
-        <div style={{ marginTop: 3, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <CategoryPath material={m} />
-          <SvpPath material={m} />
-        </div>
       </div>
       <div style={{ display: 'none' }}>
         {m.tags.slice(0, 1).map(t => <MaterialTagIcon key={t} kind={t} size={30} />)}
       </div>
-      <button onClick={(e) => { e.stopPropagation(); onDelete?.(m); }} title="Zmazať materiál" style={{
-        width: 36, height: 36, borderRadius: 10, border: '1px solid var(--alf-line)',
-        background: '#fff', color: '#A94545', cursor: 'pointer', padding: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-      </button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        {m.mine && (
+          <button onClick={(e) => { e.stopPropagation(); onEdit?.(m); }} title="Upraviť materiál" className="alf-btn-pill" style={{
+            padding: 0, width: 44, height: 44, justifyContent: 'center',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          </button>
+        )}
+        <button onClick={(e) => { e.stopPropagation(); onDelete?.(m); }} title="Zmazať materiál" className="alf-btn-pill" style={{
+          padding: 0, width: 44, height: 44, justifyContent: 'center', color: '#A94545',
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
     </div>
   );
 }
 
 // Lesson row — chevron + season + status + name + age-icon + Upraviť.
-function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest }) {
+function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest, onEditTest, onCreateExercise }) {
   const testObjs = lesson.tests.map(id => MATERIALS.find(m => m.id === id)).filter(Boolean);
   const [addOpen, setAddOpen] = React.useState(false);
+  const [mineOpen, setMineOpen] = React.useState(false);
   return (
     <>
       <div onClick={onToggle} style={{
@@ -129,7 +237,6 @@ function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest 
 
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <LessonStatus status={lesson.status} />
             <SeasonChip season={lesson.season} />
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -137,7 +244,6 @@ function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest 
               background: 'var(--alf-mint-bg)', color: '#1E7A5E',
               fontSize: 11, fontWeight: 800, letterSpacing: '.04em',
             }}>
-              <span style={{ opacity: .7, letterSpacing: '.08em' }}>VEK</span>
               <span>{AGE_META[lesson.age]?.label || lesson.age}</span>
             </span>
             {lesson.dateRange && (
@@ -157,11 +263,7 @@ function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest 
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <button onClick={(e) => { e.stopPropagation(); setAddOpen(true); }} title="Pridať materiály do hodiny" className="alf-btn-pill" style={{ padding: 0, width: 44, height: 44, justifyContent: 'center', background: 'var(--alf-mint-bg)', borderColor: 'var(--alf-mint-bg)', color: '#1E7A5E' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
           <NotesButton notes={lesson.notes} />
-          <MethodologyButton lesson={lesson} />
         </div>
 
         <div style={{ display: 'flex', gap: 6 }}>
@@ -174,11 +276,41 @@ function LessonRow({ lesson, expanded, onToggle, onEdit, onDelete, onDeleteTest 
         </div>
       </div>
 
+      {expanded && (
+        <div style={{ display: 'flex', gap: 8, padding: '4px 20px 12px', justifyContent: 'flex-end' }}>
+          <button
+            onClick={(e) => { e.stopPropagation(); setAddOpen(true); }}
+            className="alf-btn"
+            style={{ justifyContent: 'center', background: 'var(--alf-sky-bg)', borderColor: 'var(--alf-sky-deep)', color: 'var(--alf-sky-deep)', fontWeight: 800, fontSize: 11, letterSpacing: '.06em', gap: 6, padding: '7px 14px' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            PRIDAŤ Z KNIŽNICE
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); setMineOpen(true); }}
+            className="alf-btn"
+            style={{ justifyContent: 'center', background: 'var(--alf-mint-bg)', borderColor: '#1E7A5E', color: '#1E7A5E', fontWeight: 800, fontSize: 11, letterSpacing: '.06em', gap: 6, padding: '7px 14px' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            NAHRAŤ NOVÝ MATERIÁL
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onCreateExercise?.(); }}
+            className="alf-btn"
+            style={{ justifyContent: 'center', background: '#FFF3E0', borderColor: '#E07B2A', color: '#E07B2A', fontWeight: 800, fontSize: 11, letterSpacing: '.06em', gap: 6, padding: '7px 14px' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            VYTVORIŤ CVIČENIE
+          </button>
+        </div>
+      )}
+
       {expanded && testObjs.map((m) => (
-        <TestRow key={m.id} m={m} onDelete={onDeleteTest} />
+        <TestRow key={m.id} m={m} onDelete={onDeleteTest} onEdit={onEditTest} />
       ))}
 
       {addOpen && <AddMaterialsModal lesson={lesson} onClose={() => setAddOpen(false)} />}
+      {mineOpen && <NewMaterialModal open={mineOpen} onClose={() => setMineOpen(false)} />}
     </>
   );
 }
@@ -237,9 +369,6 @@ function NewLessonModal({ open, onClose, lesson }) {
   const [svpOpen, setSvpOpen] = React.useState(false);
   const [svp, setSvp] = React.useState(lesson?.svp || 'Živá príroda');
   const [notes, setNotes] = React.useState(lesson?.notes || '');
-  const [status, setStatus] = React.useState(lesson?.status || 'draft');
-  const [methodFile, setMethodFile] = React.useState(null);
-  const methodRef = React.useRef(null);
 
   if (!open) return null;
 
@@ -320,7 +449,6 @@ function NewLessonModal({ open, onClose, lesson }) {
                       fontWeight: 700, fontSize: 13,
                       color: active ? meta.color : 'var(--alf-ink-soft)',
                     }}>
-                      <AgeIcon age={a} size={26} />
                       <span style={{ whiteSpace: 'nowrap' }}>{meta.label}</span>
                     </button>
                   );
@@ -338,49 +466,7 @@ function NewLessonModal({ open, onClose, lesson }) {
             </div>
           </Field>
 
-          {/* Stav hodiny */}
-          <Field label="Stav">
-            <div style={{ display: 'flex', gap: 8 }}>
-              {[
-                { id: 'draft', label: 'Návrh',     bg: '#F0EEF6',            fg: '#6B5DAA' },
-                { id: 'next',  label: 'Pripravené', bg: 'var(--alf-mint-bg)', fg: '#1E7A5E' },
-              ].map((s) => {
-                const active = status === s.id;
-                return (
-                  <button key={s.id} onClick={() => setStatus(s.id)} style={{
-                    flex: 1, padding: '10px 12px', borderRadius: 12,
-                    border: `1.5px solid ${active ? s.fg : 'var(--alf-line)'}`,
-                    background: active ? s.bg : '#fff',
-                    color: active ? s.fg : 'var(--alf-ink-soft)',
-                    fontWeight: 700, fontSize: 13, cursor: 'pointer',
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  }}>
-                    <span style={{ width: 8, height: 8, borderRadius: 99, background: active ? s.fg : 'var(--alf-ink-mute)' }} />
-                    {s.label}
-                  </button>
-                );
-              })}
-            </div>
-          </Field>
-
-          {/* Téma — category tree dropdown */}
-          <Field label="Téma">
-            <div onClick={() => setCatOpen(o => !o)} style={{ cursor: 'pointer' }}>
-              <CategoryDropdown selected={theme} open={catOpen} />
-            </div>
-            {catOpen && (
-              <div style={{ fontSize: 11, color: 'var(--alf-ink-mute)', marginTop: 6 }}>
-                Klikni na podkategóriu pre jej výber.
-              </div>
-            )}
-          </Field>
-
-          {/* ŠVP — also a category tree picker */}
-          <Field label="Štátny vzdelávací program">
-            <div onClick={() => setSvpOpen(o => !o)} style={{ cursor: 'pointer' }}>
-              <CategoryDropdown selected={svp} open={svpOpen} />
-            </div>
-          </Field>
+          {/* Stav hodiny odstránený */}
 
           {/* Poznámky */}
           <Field label="Poznámky">
@@ -393,40 +479,6 @@ function NewLessonModal({ open, onClose, lesson }) {
             />
           </Field>
 
-          {/* Metodická príloha — docx upload */}
-          <Field label="Metodická príloha">
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 12,
-              padding: 12, borderRadius: 14,
-              border: `1.5px dashed ${methodFile ? 'var(--alf-sky-deep)' : 'var(--alf-ink-mute)'}`,
-              background: methodFile ? 'var(--alf-sky-bg)' : '#FAFBFD',
-            }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-                background: methodFile ? '#fff' : 'var(--alf-bg)',
-                color: methodFile ? 'var(--alf-sky-deep)' : 'var(--alf-ink-mute)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <path d="M14 2v6h6"/>
-                  <path d="M9 13l2 2 4-4"/>
-                </svg>
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--alf-ink)', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {methodFile || 'Zatiaľ nebol vložený žiadny dokument'}
-                </div>
-                <div style={{ fontSize: 11.5, color: 'var(--alf-ink-mute)', marginTop: 3 }}>
-                  Podporované: DOCX, PDF · max 10 MB · plán hodiny, pomôcky, aktivity
-                </div>
-              </div>
-              <input ref={methodRef} type="file" accept=".docx,.doc,.pdf" hidden onChange={(e) => setMethodFile(e.target.files?.[0]?.name || null)} />
-              <button onClick={() => methodRef.current?.click()} className="alf-btn" style={{ flexShrink: 0 }}>
-                {methodFile ? 'Zmeniť' : 'Vybrať súbor'}
-              </button>
-            </div>
-          </Field>
         </div>
 
         {/* Footer */}
@@ -808,6 +860,125 @@ function DeleteMaterialModal({ material, onClose }) {
   );
 }
 
+// ─── 1C · Kalendár — mesačný pohľad s vyznačenými hodinami ─────────────
+function Teacher_1C_Calendar() {
+  const nav = React.useContext(TeacherNavCtx);
+  const today = new Date();
+  const [month, setMonth] = React.useState(today.getMonth());
+  const [year, setYear]   = React.useState(today.getFullYear());
+
+  const MONTH_SK = ['Január','Február','Marec','Apríl','Máj','Jún','Júl','August','September','Október','November','December'];
+  const DAY_SK   = ['Po','Ut','St','Št','Pi','So','Ne'];
+
+  // Parse "d.m.-d.m.yyyy" or "d.m.yyyy" into {from, to} Date objects
+  function parseLessonDates(dr) {
+    if (!dr) return null;
+    try {
+      const clean = dr.trim();
+      // e.g. "1.6.-12.7.2026" → from=1.6.2026, to=12.7.2026
+      const parts = clean.split('-');
+      if (parts.length >= 2) {
+        const yearMatch = clean.match(/(\d{4})/);
+        const yr = yearMatch ? parseInt(yearMatch[1]) : year;
+        const [ad, am] = parts[0].replace(/\.$/, '').split('.');
+        const toLast = parts[parts.length - 1].trim();
+        const [bd, bm, by] = toLast.split('.');
+        return {
+          from: new Date(yr, parseInt(am) - 1, parseInt(ad)),
+          to:   new Date(by ? parseInt(by) : yr, parseInt(bm) - 1, parseInt(bd)),
+        };
+      }
+    } catch(e) {}
+    return null;
+  }
+
+  // Build calendar grid (Mon-first)
+  const firstDay = new Date(year, month, 1);
+  const lastDay  = new Date(year, month + 1, 0);
+  const startDow = (firstDay.getDay() + 6) % 7; // 0=Mon
+  const totalCells = Math.ceil((startDow + lastDay.getDate()) / 7) * 7;
+  const cells = Array.from({ length: totalCells }, (_, i) => {
+    const day = i - startDow + 1;
+    return (day < 1 || day > lastDay.getDate()) ? null : new Date(year, month, day);
+  });
+
+  // Map lessons to their date ranges
+  const lessonRanges = LESSONS.map(l => {
+    const range = parseLessonDates(l.dateRange);
+    return range ? { ...l, ...range } : null;
+  }).filter(Boolean);
+
+  function getLessonsForDay(date) {
+    return lessonRanges.filter(l => date >= l.from && date <= l.to);
+  }
+
+  const LESSON_COLORS = ['var(--alf-sky-deep)','var(--alf-mint-deep)','#7C5CCB','#D97757','#C45A5A'];
+
+  return (
+    <div className="alf-root" style={{ display: 'flex' }}>
+      <TeacherSidebar active="classes" classesSub="kalendar" />
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <TeacherTopBar title="Kalendár" hideAge search={false}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button className="alf-btn-pill" style={{ width: 36, height: 36, padding: 0, justifyContent: 'center' }}
+              onClick={() => { const d = new Date(year, month - 1, 1); setMonth(d.getMonth()); setYear(d.getFullYear()); }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <span style={{ fontWeight: 700, fontSize: 15, minWidth: 130, textAlign: 'center', color: 'var(--alf-ink)' }}>{MONTH_SK[month]} {year}</span>
+            <button className="alf-btn-pill" style={{ width: 36, height: 36, padding: 0, justifyContent: 'center' }}
+              onClick={() => { const d = new Date(year, month + 1, 1); setMonth(d.getMonth()); setYear(d.getFullYear()); }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+            </button>
+          </div>
+        </TeacherTopBar>
+
+        <div style={{ flex: 1, padding: '20px 36px 28px', overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {/* Day headers */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, marginBottom: 2 }}>
+            {DAY_SK.map(d => (
+              <div key={d} style={{ textAlign: 'center', fontSize: 12, fontWeight: 800, color: 'var(--alf-ink-mute)', padding: '6px 0', letterSpacing: '.06em' }}>{d}</div>
+            ))}
+          </div>
+          {/* Calendar grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, flex: 1 }}>
+            {cells.map((date, i) => {
+              const isToday = date && date.toDateString() === today.toDateString();
+              const lessons = date ? getLessonsForDay(date) : [];
+              return (
+                <div key={i} style={{
+                  minHeight: 90, borderRadius: 10, padding: '8px 8px 6px',
+                  background: date ? (isToday ? 'var(--alf-sky-bg)' : '#fff') : 'transparent',
+                  border: date ? `1.5px solid ${isToday ? 'var(--alf-sky-deep)' : 'var(--alf-line)'}` : 'none',
+                  display: 'flex', flexDirection: 'column', gap: 4,
+                }}>
+                  {date && (
+                    <>
+                      <span style={{
+                        fontSize: 13, fontWeight: isToday ? 800 : 600,
+                        color: isToday ? 'var(--alf-sky-deep)' : 'var(--alf-ink-soft)',
+                        lineHeight: 1,
+                      }}>{date.getDate()}</span>
+                      {lessons.map((l, li) => (
+                        <button key={l.id} onClick={() => nav?.navigate('classes', 'hodiny')} title={l.name} style={{
+                          width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer',
+                          background: LESSON_COLORS[li % LESSON_COLORS.length],
+                          color: '#fff', borderRadius: 5, padding: '3px 6px',
+                          fontSize: 10.5, fontWeight: 700, lineHeight: 1.25,
+                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                        }}>{l.name}</button>
+                      ))}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 // ─── 1C · Moje hodiny — grouped, collapsible list ───────────────────────
 function Teacher_1C_Lessons() {
   const [expanded, setExpanded] = React.useState(new Set(['l1']));
@@ -815,6 +986,8 @@ function Teacher_1C_Lessons() {
   const [editingLesson, setEditingLesson] = React.useState(null);
   const [deletingLesson, setDeletingLesson] = React.useState(null);
   const [deletingMaterial, setDeletingMaterial] = React.useState(null);
+  const [editingMaterial, setEditingMaterial] = React.useState(null);
+  const [createExerciseOpen, setCreateExerciseOpen] = React.useState(false);
   const openNew = () => { setEditingLesson(null); setModalOpen(true); setExpanded(new Set()); };
   const openEdit = (l) => { setEditingLesson(l); setModalOpen(true); };
   const closeModal = () => { setModalOpen(false); setEditingLesson(null); };
@@ -825,7 +998,6 @@ function Teacher_1C_Lessons() {
   const [tag, setTag] = React.useState('all');
   const [season, setSeason] = React.useState('Jar');
   const [age, setAge] = React.useState('all');
-  const [statusFilter, setStatusFilter] = React.useState('all');
   const tags = [
     { id: 'all',           label: 'Všetky' },
     { id: 'testy',         label: 'Cvičenia' },
@@ -844,24 +1016,10 @@ function Teacher_1C_Lessons() {
         </TeacherTopBar>
 
         <div style={{ flex: 1, padding: '20px 36px 28px', overflow: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* Filters row — Obdobie · tagy · Vek */}
+          {/* Filters row — Obdobie + Vek vľavo · Hľadať vpravo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', position: 'relative', zIndex: 10 }}>
             <SeasonFilter value={season} onChange={setSeason} />
-
-            <div style={{ display: 'flex', gap: 6, padding: 4, background: '#fff', borderRadius: 99, border: '1px solid var(--alf-line)' }}>
-              {[
-                { id: 'all',   label: 'Všetky' },
-                { id: 'draft', label: 'Návrh' },
-                { id: 'next',  label: 'Pripravené' },
-              ].map((s) => (
-                <button key={s.id} onClick={() => setStatusFilter(s.id)} style={{
-                  padding: '6px 16px', borderRadius: 99, border: 'none',
-                  background: statusFilter === s.id ? 'var(--alf-sky-bg)' : 'transparent',
-                  color: statusFilter === s.id ? 'var(--alf-sky-ink)' : 'var(--alf-ink-soft)',
-                  fontWeight: 700, fontSize: 13, cursor: 'pointer',
-                }}>{s.label}</button>
-              ))}
-            </div>
+            <AgeFilterPill value={age} onChange={setAge} />
 
             <span style={{ flex: 1 }} />
 
@@ -869,8 +1027,6 @@ function Teacher_1C_Lessons() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input placeholder="Hľadať..." />
             </div>
-
-            <AgeFilterPill value={age} onChange={setAge} />
           </div>
 
           {/* Lessons list */}
@@ -884,6 +1040,8 @@ function Teacher_1C_Lessons() {
                 onEdit={openEdit}
                 onDelete={setDeletingLesson}
                 onDeleteTest={setDeletingMaterial}
+                onEditTest={setEditingMaterial}
+                onCreateExercise={() => setCreateExerciseOpen(true)}
               />
             ))}
           </div>
@@ -892,6 +1050,8 @@ function Teacher_1C_Lessons() {
         <NewLessonModal key={editingLesson?.id || 'new'} open={modalOpen} onClose={closeModal} lesson={editingLesson} />
         <DeleteLessonModal lesson={deletingLesson} onClose={() => setDeletingLesson(null)} />
         <DeleteMaterialModal material={deletingMaterial} onClose={() => setDeletingMaterial(null)} />
+        <NewMaterialModal key={editingMaterial?.id || 'edit-mat'} open={!!editingMaterial} material={editingMaterial} onClose={() => setEditingMaterial(null)} />
+        <CreateExerciseModal open={createExerciseOpen} onClose={() => setCreateExerciseOpen(false)} />
       </main>
     </div>
   );
@@ -1220,4 +1380,4 @@ function AddMaterialsModal({ lesson, onClose }) {
   );
 }
 
-Object.assign(window, { Teacher_1C_Lessons });
+Object.assign(window, { Teacher_1C_Lessons, Teacher_1C_Calendar, CreateExerciseModal });
